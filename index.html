@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="description" content="Axiom - Professional, high-precision scientific calculator for students, engineers, and everyday users. Fast, modern, responsive on desktop and mobile, and universally accessible.">
+  <meta name="author" content="Mohammad Abuzar Alam">
+  <meta name="copyright" content="Copyright (c) 2026 Mohammad Abuzar Alam. All rights reserved.">
+  <meta name="theme-color" content="#080c16">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="application-name" content="Axiom Scientific Calculator">
+  
+  <!-- Open Graph / Universal Web Metadata -->
+  <meta property="og:title" content="Axiom Scientific Calculator">
+  <meta property="og:description" content="Professional, high-precision scientific calculator for students, engineers, and everyday users. Universally designed for everyone.">
+  <meta property="og:type" content="website">
+
+  <title>Axiom Scientific Calculator</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='4' y1='4' x2='44' y2='44' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='50%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%23ec4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='48' height='48' rx='12' fill='%230f172a'/%3E%3Cpath d='M14 14 H34 L23.5 24 L34 34 H14' stroke='url(%23g)' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Ccircle cx='14' cy='14' r='2.5' fill='%2338bdf8'/%3E%3Ccircle cx='34' cy='14' r='2.5' fill='%236366f1'/%3E%3Ccircle cx='34' cy='34' r='2.5' fill='%23ec4899'/%3E%3Ccircle cx='14' cy='34' r='2.5' fill='%23f43f5e'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Keyboard Navigation Skip Links -->
+  <a href="#calculator-card" class="skip-link">Skip to calculator (Direct keyboard entry)</a>
+  <a href="#calc-display-section" class="skip-link">Skip to calculator display</a>
+  <a href="#keypad-section" class="skip-link">Skip to calculator keypad</a>
+
+  <!-- Dedicated Screen Reader Live Regions with Dual-Slot Alternation -->
+  <!-- Polite live region for standard interaction feedback -->
+  <div id="screen-reader-announcer" class="sr-only" aria-live="polite" aria-atomic="true">
+    <span id="sr-polite-1"></span>
+    <span id="sr-polite-2"></span>
+  </div>
+  <!-- Assertive live region for errors requiring immediate attention -->
+  <div id="screen-reader-assertive" class="sr-only" role="alert" aria-live="assertive" aria-atomic="true">
+    <span id="sr-assertive-1"></span>
+    <span id="sr-assertive-2"></span>
+  </div>
+  <!-- Dedicated assertive alert region for calculation results -->
+  <div id="screen-reader-result" class="sr-only" role="alert" aria-live="assertive" aria-atomic="true">
+    <span id="sr-result-1"></span>
+    <span id="sr-result-2"></span>
+  </div>
+
+  <div class="calculator-app">
+    <!-- Header Section -->
+    <header class="app-header" role="banner">
+      <div class="brand-wrapper" title="Axiom Scientific Calculator">
+        <!-- Distinctive Axiom Mathematical Vector Logo -->
+        <div class="brand-logo-container" aria-hidden="true">
+          <svg class="brand-logo" width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="axiom-logo-grad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#38bdf8" />
+                <stop offset="50%" stop-color="#6366f1" />
+                <stop offset="100%" stop-color="#ec4899" />
+              </linearGradient>
+              <linearGradient id="axiom-logo-glow" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.18" />
+                <stop offset="100%" stop-color="#6366f1" stop-opacity="0.04" />
+              </linearGradient>
+            </defs>
+            <rect x="2.5" y="2.5" width="43" height="43" rx="12" fill="url(#axiom-logo-glow)" stroke="url(#axiom-logo-grad)" stroke-width="1.8" />
+            <path d="M14 14 H34 L23.5 24 L34 34 H14" stroke="url(#axiom-logo-grad)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="14" cy="14" r="2.5" fill="#38bdf8" />
+            <circle cx="34" cy="14" r="2.5" fill="#6366f1" />
+            <circle cx="23.5" cy="24" r="2.2" fill="#818cf8" />
+            <circle cx="34" cy="34" r="2.5" fill="#ec4899" />
+            <circle cx="14" cy="34" r="2.5" fill="#f43f5e" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">Axiom</span>
+          <span class="brand-tagline">Scientific Calculator</span>
+        </div>
+      </div>
+
+      <!-- Navigation & Utility Controls -->
+      <nav class="header-actions" aria-label="Calculator tools and settings">
+        <button type="button" id="btn-open-constants" class="btn-icon-nav" aria-haspopup="dialog" aria-expanded="false" aria-controls="modal-constants" aria-label="Open scientific physical constants library (Alt+C)" title="Physical Constants (Alt+C)">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" x2="12" y1="2" y2="22"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <span>Constants</span>
+        </button>
+
+        <button type="button" id="btn-open-stats" class="btn-icon-nav" aria-haspopup="dialog" aria-expanded="false" aria-controls="modal-stats" aria-label="Open statistical calculations tool (Alt+T)" title="Statistics Tool (Alt+T)">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 20V10"></path>
+            <path d="M12 20V4"></path>
+            <path d="M6 20v-6"></path>
+          </svg>
+          <span>Stats</span>
+        </button>
+
+        <button type="button" id="btn-open-history" class="btn-icon-nav" aria-haspopup="dialog" aria-expanded="false" aria-controls="modal-history" aria-label="Open calculation history (Alt+H)" title="History (Alt+H)">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>History</span>
+        </button>
+
+        <button type="button" id="btn-open-settings" class="btn-icon-nav" aria-haspopup="dialog" aria-expanded="false" aria-controls="modal-settings" aria-label="Open preferences and settings (Alt+S)" title="Settings (Alt+S)">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <span>Settings</span>
+        </button>
+
+        <button type="button" id="btn-open-help" class="btn-icon-nav" aria-haspopup="dialog" aria-expanded="false" aria-controls="modal-help" aria-label="Open keyboard shortcuts and user guide (F1)" title="Help & Shortcuts (F1)">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" x2="12.01" y1="17" y2="17"></line>
+          </svg>
+          <span>Help</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Main Calculator Chassis: Semantic landmark region for universal accessibility across NVDA, JAWS, and TalkBack -->
+    <main id="calculator-card" class="calculator-card" role="region" aria-label="Scientific Calculator">
+
+      <!-- Display Section -->
+      <section id="calc-display-section" class="calculator-screen" role="region" aria-label="Calculator display and status">
+        <!-- Status Bar -->
+        <div class="screen-status-bar">
+          <div class="status-badges">
+            <button type="button" id="calc-angle-indicator" class="badge badge-mode" aria-label="Active angle mode: Degree. Click to toggle angle mode (Alt+M)" title="Toggle Angle Mode (Alt+M)">
+              DEG
+            </button>
+            <button type="button" id="calc-base-indicator" class="badge badge-base" aria-label="Current number base: DEC. Click to cycle base (Alt+B)" title="Cycle Number Base (Alt+B)">
+              DEC
+            </button>
+            <span id="calc-memory-indicator" class="badge badge-memory" aria-label="Memory empty">
+              M
+            </span>
+          </div>
+
+          <div style="display: flex; gap: 0.4rem; align-items: center;">
+            <button type="button" id="btn-read-display" class="btn-copy" aria-label="Read current display value aloud (Press D)" title="Read Display Aloud (D)">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+              </svg>
+              <span>Speak</span>
+            </button>
+
+            <button type="button" id="btn-copy-result" class="btn-copy" aria-label="Copy displayed result to clipboard" title="Copy to clipboard">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Upper Formula / Expression Preview (Interactive and accessible to swipe exploration) -->
+        <div id="calc-expression" class="screen-expression" tabindex="0" role="region" aria-label="Formula expression: empty"></div>
+
+        <!-- Lower Primary Entry / Result Display -->
+        <div id="calc-display" class="screen-main-value" tabindex="0" role="status" aria-live="polite" aria-atomic="true" aria-label="Current display value: 0">0</div>
+      </section>
+
+      <!-- Keypad Container -->
+      <section id="keypad-section" class="keypad-container" data-mobile-view="sci" role="region" aria-label="Calculator keypad">
+
+        <!-- Mobile Keypad Segmented Switcher (Visible on small screens <= 820px) -->
+        <div class="keypad-mobile-switcher" role="tablist" aria-label="Keypad views">
+          <button type="button" role="tab" id="tab-mode-sci" class="mobile-tab-btn active" aria-selected="true" aria-controls="keypad-scientific">fx Scientific</button>
+          <button type="button" role="tab" id="tab-mode-basic" class="mobile-tab-btn" aria-selected="false" aria-controls="keypad-standard">123 Basic</button>
+        </div>
+
+        <!-- Top Memory & Mode Bar -->
+        <div class="keypad-bar-top" role="group" aria-label="Memory and mode controls">
+          <button type="button" class="calc-btn btn-memory" data-action="mc" aria-label="Memory clear">MC</button>
+          <button type="button" class="calc-btn btn-memory" data-action="mr" aria-label="Memory recall">MR</button>
+          <button type="button" class="calc-btn btn-memory" data-action="m+" aria-label="Memory add">M+</button>
+          <button type="button" class="calc-btn btn-memory" data-action="m-" aria-label="Memory subtract">M−</button>
+          <button type="button" class="calc-btn btn-memory" data-action="ms" aria-label="Memory store">MS</button>
+          <button type="button" class="calc-btn btn-action" data-action="paren-open" aria-label="Open parenthesis">(</button>
+          <button type="button" class="calc-btn btn-action" data-action="paren-close" aria-label="Close parenthesis">)</button>
+        </div>
+
+        <!-- Main Dual Grid: Scientific Functions (Left) + Standard Keypad (Right) -->
+        <div class="keypad-main-grid">
+
+          <!-- Left Column: Scientific Functions -->
+          <div class="keypad-scientific" role="group" aria-label="Scientific functions">
+            <!-- Row 1: Inverse & Hyperbolic Toggles & Primary Trig -->
+            <button type="button" id="btn-inv" class="calc-btn btn-sci" data-action="toggle-inv" aria-pressed="false" aria-label="Second function mode, toggles inverse functions">2nd</button>
+            <button type="button" id="btn-hyp" class="calc-btn btn-sci" data-action="toggle-hyp" aria-pressed="false" aria-label="Hyperbolic mode, toggles hyperbolic trigonometric functions">hyp</button>
+            <button type="button" class="calc-btn btn-sci" data-action="sin" aria-label="Sine">sin</button>
+            <button type="button" class="calc-btn btn-sci" data-action="cos" aria-label="Cosine">cos</button>
+            <button type="button" class="calc-btn btn-sci" data-action="tan" aria-label="Tangent">tan</button>
+
+            <!-- Row 2: Reciprocal Trig & Logarithms -->
+            <button type="button" class="calc-btn btn-sci" data-action="csc" aria-label="Cosecant">csc</button>
+            <button type="button" class="calc-btn btn-sci" data-action="sec" aria-label="Secant">sec</button>
+            <button type="button" class="calc-btn btn-sci" data-action="cot" aria-label="Cotangent">cot</button>
+            <button type="button" class="calc-btn btn-sci" data-action="ln" aria-label="Natural logarithm">ln</button>
+            <button type="button" class="calc-btn btn-sci" data-action="log" aria-label="Common logarithm base 10">log</button>
+
+            <!-- Row 3: Powers & Roots -->
+            <button type="button" class="calc-btn btn-sci" data-action="sqr" aria-label="Square, x squared">x²</button>
+            <button type="button" class="calc-btn btn-sci" data-action="cube" aria-label="Cube, x cubed">x³</button>
+            <button type="button" class="calc-btn btn-sci" data-action="pow" aria-label="Power, x to the power y">xʸ</button>
+            <button type="button" class="calc-btn btn-sci" data-action="sqrt" aria-label="Square root">√x</button>
+            <button type="button" class="calc-btn btn-sci" data-action="cbrt" aria-label="Cube root">∛x</button>
+
+            <!-- Row 4: Roots, Reciprocal & Combinatorics -->
+            <button type="button" class="calc-btn btn-sci" data-action="nthRoot" aria-label="Nth root">ʸ√x</button>
+            <button type="button" class="calc-btn btn-sci" data-action="recip" aria-label="Reciprocal, 1 divided by x">1/x</button>
+            <button type="button" class="calc-btn btn-sci" data-action="abs" aria-label="Absolute value">|x|</button>
+            <button type="button" class="calc-btn btn-sci" data-action="fact" aria-label="Factorial">n!</button>
+            <button type="button" class="calc-btn btn-sci" data-action="nPr" aria-label="Permutations n P r">nPr</button>
+
+            <!-- Row 5: Combinatorics, Logs & Constants -->
+            <button type="button" class="calc-btn btn-sci" data-action="nCr" aria-label="Combinations n C r">nCr</button>
+            <button type="button" class="calc-btn btn-sci" data-action="log2" aria-label="Binary logarithm base 2">log₂</button>
+            <button type="button" class="calc-btn btn-sci" data-action="pow2" aria-label="2 to the power x">2ˣ</button>
+            <button type="button" class="calc-btn btn-sci" data-action="pi" aria-label="Pi constant, 3.14159">π</button>
+            <button type="button" class="calc-btn btn-sci" data-action="e" aria-label="Euler's constant, 2.71828">e</button>
+
+            <!-- Row 6: Advanced Math & Constants -->
+            <button type="button" class="calc-btn btn-sci" data-action="tau" aria-label="Tau constant, 2 pi">τ</button>
+            <button type="button" class="calc-btn btn-sci" data-action="phi" aria-label="Golden ratio phi">φ</button>
+            <button type="button" class="calc-btn btn-sci" data-action="gcd" aria-label="Greatest common divisor">gcd</button>
+            <button type="button" class="calc-btn btn-sci" data-action="lcm" aria-label="Least common multiple">lcm</button>
+            <button type="button" class="calc-btn btn-sci" data-action="rand" aria-label="Random number between 0 and 1">rand</button>
+
+            <!-- Row 7: Rounding & Modulo -->
+            <button type="button" class="calc-btn btn-sci" data-action="mod" aria-label="Modulo remainder">mod</button>
+            <button type="button" class="calc-btn btn-sci" data-action="floor" aria-label="Floor, round down">floor</button>
+            <button type="button" class="calc-btn btn-sci" data-action="ceil" aria-label="Ceiling, round up">ceil</button>
+            <button type="button" class="calc-btn btn-sci" data-action="round" aria-label="Round to nearest integer">round</button>
+            <button type="button" class="calc-btn btn-sci" data-action="sign" aria-label="Sign function">sign</button>
+
+            <!-- Row 8: Advanced Capabilities (F<=>D, ENG, BASE, CONST, STATS) -->
+            <button type="button" id="btn-frac" class="calc-btn btn-sci" data-action="toggle-frac" aria-pressed="false" aria-label="Toggle fraction and decimal representation (Alt+N)">F⇔D</button>
+            <button type="button" id="btn-eng" class="calc-btn btn-sci" data-action="toggle-eng" aria-label="Engineering notation (Alt+E)">ENG</button>
+            <button type="button" id="btn-base" class="calc-btn btn-sci" data-action="cycle-base" aria-label="Cycle number base DEC, HEX, BIN, OCT (Alt+B)">BASE</button>
+            <button type="button" id="btn-const-keypad" class="calc-btn btn-sci" data-action="open-constants" aria-label="Open physical constants library (Alt+C)">CONST</button>
+            <button type="button" id="btn-stats-keypad" class="calc-btn btn-sci" data-action="open-stats" aria-label="Open statistical calculations tool (Alt+T)">STATS</button>
+          </div>
+
+          <!-- Right Column: Standard Numeric & Operator Keypad -->
+          <div class="keypad-standard" role="group" aria-label="Numeric and arithmetic keypad">
+            <!-- Row 1: Clear & Divide -->
+            <button type="button" class="calc-btn btn-danger" data-action="ac" aria-label="All clear, reset calculator">AC</button>
+            <button type="button" class="calc-btn btn-danger" data-action="ce" aria-label="Clear entry">CE</button>
+            <button type="button" class="calc-btn btn-danger" data-action="del" aria-label="Backspace, delete last character">⌫</button>
+            <button type="button" class="calc-btn btn-op" data-action="/" aria-label="Division">÷</button>
+
+            <!-- Row 2: 7, 8, 9, Multiply -->
+            <button type="button" class="calc-btn btn-num" data-action="digit" data-value="7" aria-label="7">7</button>
+            <button type="button" class="calc-btn btn-num" data-action="digit" data-value="8" aria-label="8">8</button>
+            <button type="button" class="calc-btn btn-num" data-action="digit" data-value="9" aria-label="9">9</button>
+            <button type="button" class="calc-btn btn-op" data-action="*" aria-label="Multiplication">×</button>
+
+            <!-- Row 3: 4, 5, 6, Subtract -->
+            <button type="button" class="calc-btn btn-num" data-action="digit" data-value="4" aria-label="4">4</button>
+            <button type="button" class="calc-btn btn-num" data-action="digit" data-value="5" aria-label="5">5</button>
+            <button type="button" class="calc-btn btn-num" data-action="digit" data-value="6" aria-label="6">6</button>
+            <button type="button" class="calc-btn btn-op" data-action="-" aria-label="Subtraction">−</button>
+
+            <!-- Row 4: 1, 2, 3, Add -->
+            <button type="button" class="calc-btn btn-num" data-action="digit" data-value="1" aria-label="1">1</button>
+            <button type="button" class="calc-btn btn-num" data-action="digit" data-value="2" aria-label="2">2</button>
+            <button type="button" class="calc-btn btn-num" data-action="digit" data-value="3" aria-label="3">3</button>
+            <button type="button" class="calc-btn btn-op" data-action="+" aria-label="Addition">+</button>
+
+            <!-- Row 5: Negate, 0, Decimal, Equals -->
+            <button type="button" class="calc-btn btn-action" data-action="negate" aria-label="Change sign, positive or negative">±</button>
+            <button type="button" class="calc-btn btn-num" data-action="digit" data-value="0" aria-label="0">0</button>
+            <button type="button" class="calc-btn btn-num" data-action="decimal" aria-label="Decimal point">.</button>
+            <button type="button" class="calc-btn btn-equals" data-action="equals" aria-label="Equals, calculate result">=</button>
+
+            <!-- Row 6: Percent, Power, Comma, Answer Recall -->
+            <button type="button" class="calc-btn btn-action" data-action="%" aria-label="Percent">%</button>
+            <button type="button" class="calc-btn btn-action" data-action="^" aria-label="Power operation">^</button>
+            <button type="button" class="calc-btn btn-action" data-action="comma" aria-label="Comma separator">,</button>
+            <button type="button" class="calc-btn btn-action" data-action="ans" aria-label="Answer, recall previous calculation result">Ans</button>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Discreet, Universal Application Footer -->
+    <footer class="app-footer" role="contentinfo">
+      <div class="footer-inner">
+        <span>&copy; 2026 Axiom &bull; Designed &amp; Developed by <strong>Mohammad Abuzar Alam</strong>. All rights reserved.</span>
+        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+          <button type="button" id="btn-open-feedback-footer" class="footer-email-link" aria-haspopup="dialog" aria-expanded="false" aria-controls="modal-feedback" aria-label="Open contact and feedback dialog for developer Mohammad Abuzar Alam">
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+            <span>Feedback &amp; Contact</span>
+          </button>
+          <a href="mailto:abuzaraalam34@gmail.com?subject=Axiom%20Scientific%20Calculator%20Feedback" class="footer-email-link" aria-label="Direct email to abuzaraalam34@gmail.com">
+            <span>abuzaraalam34@gmail.com</span>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- =====================================================================
+       Accessible Dialogs / Modals (Settings, History, Help)
+       ===================================================================== -->
+
+  <!-- 1. Settings Dialog -->
+  <div id="modal-settings" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="settings-dialog-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="settings-dialog-title" class="modal-title">Preferences & Settings</h2>
+        <button type="button" class="modal-close" aria-label="Close settings dialog">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="settings-group">
+          <!-- Audio Feedback Master -->
+          <div class="settings-item">
+            <div class="settings-info">
+              <label for="setting-sound-enabled" class="settings-label">Sound & Beep Feedback</label>
+              <span class="settings-desc">Plays programmatic tone beeps for interactions and results</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-sound-enabled" checked aria-label="Sound and beep feedback">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Volume Slider -->
+          <div class="settings-item">
+            <div class="settings-info">
+              <label for="setting-sound-volume" class="settings-label">Beep Volume</label>
+              <span class="settings-desc" id="setting-volume-label">Volume: 40%</span>
+            </div>
+            <div class="volume-control-wrapper">
+              <input type="range" id="setting-sound-volume" class="range-slider" min="0" max="100" value="40" aria-label="Beep volume level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40" aria-valuetext="Volume: 40 percent">
+            </div>
+          </div>
+
+          <!-- Button Click Sound -->
+          <div class="settings-item">
+            <div class="settings-info">
+              <label for="setting-button-sounds" class="settings-label">Button Click Beeps</label>
+              <span class="settings-desc">Plays distinct beeps when numbers and operators are pressed</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-button-sounds" checked aria-label="Button click beeps">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Theme Palette Selector -->
+          <div class="settings-item">
+            <div class="settings-info">
+              <label for="setting-theme-select" class="settings-label">Color Theme</label>
+              <span class="settings-desc">Select visual color theme palette</span>
+            </div>
+            <select id="setting-theme-select" class="form-select" aria-label="Visual color theme">
+              <option value="dark">Dark Navy / Charcoal (Default)</option>
+              <option value="high-contrast">High Contrast (WCAG AAA)</option>
+              <option value="light">Clean Light Theme</option>
+            </select>
+          </div>
+
+          <!-- Spoken Announcements -->
+          <div class="settings-item">
+            <div class="settings-info">
+              <label for="setting-spoken-announcements" class="settings-label">Spoken Announcements</label>
+              <span class="settings-desc">Live spoken updates for screen readers and assistive devices</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-spoken-announcements" checked aria-label="Spoken screen reader announcements">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- High Contrast Mode -->
+          <div class="settings-item">
+            <div class="settings-info">
+              <label for="setting-high-contrast" class="settings-label">High Contrast Mode</label>
+              <span class="settings-desc">WCAG AAA compliant black background with vivid contrast</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-high-contrast" aria-label="High contrast mode">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Large Buttons Mode -->
+          <div class="settings-item">
+            <div class="settings-info">
+              <label for="setting-large-buttons" class="settings-label">Large Buttons Mode</label>
+              <span class="settings-desc">Increases touch and keyboard target sizes to over 58px</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-large-buttons" aria-label="Large buttons mode">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Large Display Text -->
+          <div class="settings-item">
+            <div class="settings-info">
+              <label for="setting-large-display" class="settings-label">Large Display Text</label>
+              <span class="settings-desc">Substantially enlarges formula and calculation result text</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-large-display" aria-label="Large display text">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Reduce Animations -->
+          <div class="settings-item">
+            <div class="settings-info">
+              <label for="setting-reduce-animations" class="settings-label">Reduce Motion & Animations</label>
+              <span class="settings-desc">Removes transition and UI movement effects</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-reduce-animations" aria-label="Reduce motion and animations">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="btn-reset-settings" class="btn-secondary">Reset to Defaults</button>
+        <button type="button" class="btn-primary modal-close">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Calculation History Dialog -->
+  <div id="modal-history" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="history-dialog-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="history-dialog-title" class="modal-title">Calculation History</h2>
+        <button type="button" class="modal-close" aria-label="Close calculation history dialog">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <ul id="history-list" class="history-list" role="list" aria-label="Previous calculations list">
+          <li class="history-empty" role="status">No previous calculations in history.</li>
+        </ul>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="btn-clear-history" class="btn-secondary">Clear History</button>
+        <button type="button" class="btn-primary modal-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Physical Constants Dialog -->
+  <div id="modal-constants" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="constants-dialog-title">
+    <div class="modal-content" style="max-width: 660px;">
+      <div class="modal-header">
+        <h2 id="constants-dialog-title" class="modal-title">Scientific & Physical Constants</h2>
+        <button type="button" class="modal-close" aria-label="Close physical constants dialog">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 0.75rem;">
+          Select a fundamental physical constant to insert its high-precision value directly into your calculation.
+        </p>
+        <div style="margin-bottom: 1rem;">
+          <label for="constants-search-input" class="sr-only">Search physical constants</label>
+          <input type="search" id="constants-search-input" class="constants-search" placeholder="Search constants by name, symbol, or unit (e.g., speed of light, h, gravity)..." aria-label="Search constants">
+        </div>
+        <div id="constants-list" class="constants-grid" role="list" aria-label="Physical constants list">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-primary modal-close">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Statistical Calculations Dialog -->
+  <div id="modal-stats" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="stats-dialog-title">
+    <div class="modal-content" style="max-width: 620px;">
+      <div class="modal-header">
+        <h2 id="stats-dialog-title" class="modal-title">Statistical Analysis Tool</h2>
+        <button type="button" class="modal-close" aria-label="Close statistical analysis dialog">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 0.5rem;">
+          Enter or paste numbers separated by commas, spaces, or newlines to compute complete descriptive statistics.
+        </p>
+        <div style="margin-bottom: 0.75rem;">
+          <label for="stats-data-input" class="settings-label" style="display:block; margin-bottom: 0.25rem;">Data Sample Values:</label>
+          <textarea id="stats-data-input" class="stats-textarea" rows="4" placeholder="Example: 12, 15, 23.5, 42, 19, 8.2, 33" aria-label="Data values for statistical calculation"></textarea>
+        </div>
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+          <button type="button" id="btn-run-stats" class="btn-primary" style="padding: 0.5rem 1.25rem;">Compute Statistics</button>
+          <button type="button" id="btn-clear-stats" class="btn-secondary" style="padding: 0.5rem 1rem;">Clear Data</button>
+        </div>
+        <div id="stats-results-container" aria-live="polite">
+          <table class="stats-results-table" role="table" aria-label="Statistical calculation results">
+            <thead>
+              <tr>
+                <th scope="col">Statistic</th>
+                <th scope="col">Value</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody id="stats-results-body">
+              <tr>
+                <td colspan="3" style="text-align: center; color: var(--text-dim); padding: 1.5rem;">Enter values above and click "Compute Statistics".</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-primary modal-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Help & Keyboard Shortcuts Dialog -->
+  <div id="modal-help" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="help-dialog-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="help-dialog-title" class="modal-title">Keyboard Shortcuts & User Guide</h2>
+        <button type="button" class="modal-close" aria-label="Close help dialog">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <section aria-labelledby="guide-tips-title">
+          <h3 id="guide-tips-title" style="font-size: 1.1rem; color: var(--text-accent); margin-bottom: 0.5rem;">Screen Reader & Keyboard Guide</h3>
+          <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-main);">
+            Axiom is built with complete universal accessibility. Every button has an unabbreviated descriptive name. When typing with your keyboard or navigating with screen readers (NVDA, JAWS, VoiceOver, TalkBack), results and input changes are announced clearly. You can press <kbd class="kbd-badge">D</kbd> at any time to hear the current display value, or <kbd class="kbd-badge">F</kbd> for the full formula expression.
+          </p>
+        </section>
+
+        <section aria-labelledby="shortcuts-table-title">
+          <h3 id="shortcuts-table-title" style="font-size: 1.1rem; color: var(--text-accent); margin-bottom: 0.5rem;">Keyboard Shortcuts Reference</h3>
+          <table class="shortcuts-table" role="table">
+            <thead>
+              <tr>
+                <th scope="col">Key</th>
+                <th scope="col">Function / Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><kbd class="kbd-badge">0</kbd> – <kbd class="kbd-badge">9</kbd></td>
+                <td>Enter numbers</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">.</kbd></td>
+                <td>Decimal point</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">+</kbd>, <kbd class="kbd-badge">-</kbd>, <kbd class="kbd-badge">*</kbd>, <kbd class="kbd-badge">/</kbd></td>
+                <td>Basic arithmetic operations (+, −, ×, ÷)</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">Enter</kbd> or <kbd class="kbd-badge">=</kbd></td>
+                <td>Calculate result</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">Backspace</kbd></td>
+                <td>Delete last character/token (announces deleted item and remaining value)</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">Delete</kbd></td>
+                <td>Clear Entry (CE) - clears current entry</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">Escape</kbd></td>
+                <td>All Clear (AC) / Close open dialog</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">d</kbd> or <kbd class="kbd-badge">Alt</kbd> + <kbd class="kbd-badge">D</kbd></td>
+                <td>Read current display value aloud</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">f</kbd> or <kbd class="kbd-badge">Alt</kbd> + <kbd class="kbd-badge">F</kbd></td>
+                <td>Read current formula expression aloud</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">Alt</kbd> + <kbd class="kbd-badge">N</kbd></td>
+                <td>Toggle Fraction & Decimal representation (F⇔D)</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">Alt</kbd> + <kbd class="kbd-badge">E</kbd></td>
+                <td>Toggle Engineering notation (ENG)</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">Alt</kbd> + <kbd class="kbd-badge">B</kbd></td>
+                <td>Cycle Number Base (DEC &rarr; HEX &rarr; BIN &rarr; OCT)</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">Alt</kbd> + <kbd class="kbd-badge">C</kbd></td>
+                <td>Open Scientific Physical Constants Library</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">Alt</kbd> + <kbd class="kbd-badge">T</kbd></td>
+                <td>Open Statistical Analysis Tool</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">(</kbd> and <kbd class="kbd-badge">)</kbd></td>
+                <td>Open and close parentheses</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">^</kbd></td>
+                <td>Power operation (xʸ)</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">%</kbd></td>
+                <td>Percentage calculation</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">!</kbd></td>
+                <td>Factorial (n!)</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">s</kbd>, <kbd class="kbd-badge">c</kbd>, <kbd class="kbd-badge">t</kbd></td>
+                <td>Quick trig shortcuts (sin, cos, tan)</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">l</kbd>, <kbd class="kbd-badge">g</kbd></td>
+                <td>Logarithms (ln, log₁₀)</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">r</kbd></td>
+                <td>Square root (√x)</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">p</kbd>, <kbd class="kbd-badge">e</kbd></td>
+                <td>Constants Pi (π) and Euler's (e)</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">Alt</kbd> + <kbd class="kbd-badge">M</kbd></td>
+                <td>Cycle Angle Mode (Degree &rarr; Radian &rarr; Gradian)</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">Alt</kbd> + <kbd class="kbd-badge">H</kbd></td>
+                <td>Open calculation history</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">Alt</kbd> + <kbd class="kbd-badge">S</kbd></td>
+                <td>Open accessibility settings</td>
+              </tr>
+              <tr>
+                <td><kbd class="kbd-badge">F1</kbd> or <kbd class="kbd-badge">?</kbd></td>
+                <td>Open this help dialog</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section aria-labelledby="audio-guide-title" style="margin-top: 1rem;">
+          <h3 id="audio-guide-title" style="font-size: 1.1rem; color: var(--text-accent); margin-bottom: 0.5rem;">Audio Tone Legend</h3>
+          <ul style="padding-left: 1.25rem; font-size: 0.95rem; color: var(--text-main); display: flex; flex-direction: column; gap: 0.35rem;">
+            <li><strong>Number entered:</strong> Short, soft sine beep (480 Hz).</li>
+            <li><strong>Operator selected:</strong> Distinct triangle tone (587 Hz).</li>
+            <li><strong>Scientific function:</strong> Harmonic octave confirmation chime (660 Hz + 1320 Hz).</li>
+            <li><strong>Calculation completed:</strong> Uplifting two-tone major third chord (C5 &rarr; G5).</li>
+            <li><strong>Error warning:</strong> Descending buzzer tone (220 Hz &rarr; 110 Hz).</li>
+            <li><strong>Clear operation:</strong> Quick downward sweep (750 Hz &rarr; 240 Hz).</li>
+            <li><strong>Memory operation:</strong> Melodic dual high chime (784 Hz + 1568 Hz).</li>
+          </ul>
+        </section>
+
+        <!-- Developer & Feedback Section -->
+        <section aria-labelledby="developer-info-title" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+          <h3 id="developer-info-title" style="font-size: 1.1rem; color: var(--text-accent); margin-bottom: 0.35rem;">Developer &amp; Feedback</h3>
+          <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-main);">
+            Axiom was designed and engineered by <strong>Mohammad Abuzar Alam</strong> as a universal, accessible mathematical tool for everyone. &copy; 2026 Mohammad Abuzar Alam. All rights reserved.
+          </p>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+            <button type="button" id="btn-open-feedback-help" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; font-size: 0.95rem; border-radius: var(--border-radius-sm);">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+              </svg>
+              <span>Feedback &amp; Issue Report</span>
+            </button>
+            <a href="mailto:abuzaraalam34@gmail.com?subject=Axiom%20Scientific%20Calculator%20Feedback" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; padding: 0.5rem 1rem; font-size: 0.95rem; border-radius: var(--border-radius-sm);">
+              <span>Email: abuzaraalam34@gmail.com</span>
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-primary modal-close">Got It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Developer Feedback & Communication Dialog -->
+  <div id="modal-feedback" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="feedback-dialog-title">
+    <div class="modal-content" style="max-width: 580px;">
+      <div class="modal-header">
+        <h2 id="feedback-dialog-title" class="modal-title">Contact &amp; Feedback</h2>
+        <button type="button" class="modal-close" aria-label="Close feedback dialog">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 0.85rem;">
+          Have a question, encountered an issue, or want to suggest a new feature? You can contact the developer directly.
+        </p>
+
+        <div class="developer-card" style="background: var(--bg-display); border: 1px solid var(--border-subtle); border-radius: var(--border-radius-sm); padding: 1rem; margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <div>
+              <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim);">&copy; 2026 Lead Developer &amp; Author</div>
+              <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-main);">Mohammad Abuzar Alam</div>
+            </div>
+            <div>
+              <button type="button" id="btn-copy-developer-email" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" aria-label="Copy developer email address to clipboard">
+                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span id="copy-email-text">Copy Email</span>
+              </button>
+            </div>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 1rem; color: var(--accent-cyan); word-break: break-all;">
+            abuzaraalam34@gmail.com
+          </div>
+        </div>
+
+        <!-- Feedback Composer -->
+        <form id="feedback-form" onsubmit="return false;">
+          <div style="margin-bottom: 0.85rem;">
+            <label for="feedback-type" class="settings-label" style="display: block; margin-bottom: 0.3rem;">Topic / Message Type</label>
+            <select id="feedback-type" class="form-select" aria-label="Message type">
+              <option value="Issue / Bug Report">Report an Issue or Calculation Problem</option>
+              <option value="Feature Suggestion">Suggest a New Feature or Scientific Function</option>
+              <option value="Accessibility Feedback">Accessibility &amp; Screen Reader Feedback</option>
+              <option value="General Question">General Question or Compliment</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom: 0.85rem;">
+            <label for="feedback-subject" class="settings-label" style="display: block; margin-bottom: 0.3rem;">Subject</label>
+            <input type="text" id="feedback-subject" class="constants-search" placeholder="Brief summary of your message..." aria-label="Feedback subject">
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label for="feedback-message" class="settings-label" style="display: block; margin-bottom: 0.3rem;">Your Message / Issue Details</label>
+            <textarea id="feedback-message" class="stats-textarea" rows="4" placeholder="Describe the calculation, formula, error, or suggestion in detail..." aria-label="Feedback message details"></textarea>
+          </div>
+
+          <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+            <button type="button" id="btn-send-email-client" class="btn-primary" style="padding: 0.6rem 1.25rem;">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+              </svg>
+              <span>Compose Email in Mail App</span>
+            </button>
+            <a id="feedback-direct-mailto" href="mailto:abuzaraalam34@gmail.com?subject=Axiom%20Calculator%20Feedback" class="btn-secondary" style="text-decoration: none; padding: 0.6rem 1rem;">
+              Direct Mail Link
+            </a>
+          </div>
+
+          <!-- Instant Feedback Response Banner -->
+          <div id="feedback-response-banner" style="display: none; margin-top: 1rem; padding: 0.85rem 1rem; border-radius: var(--border-radius-sm); background: rgba(56, 189, 248, 0.12); border: 1px solid var(--accent-cyan); color: var(--text-main);" role="status" aria-live="polite">
+            <div style="display: flex; align-items: flex-start; gap: 0.6rem;">
+              <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <div>
+                <div style="font-weight: 700; color: var(--accent-cyan); margin-bottom: 0.2rem;">Response &amp; Delivery Ready!</div>
+                <div style="font-size: 0.9rem;" id="feedback-response-text">
+                  Your mail app has opened with your message addressed to <strong>Mohammad Abuzar Alam (abuzaraalam34@gmail.com)</strong>. Click "Send" in your email client to deliver your feedback!
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <!-- Quick Instant Help / Common Solutions -->
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--text-accent); margin-bottom: 0.5rem;">Quick Troubleshooting</h3>
+          <ul style="font-size: 0.88rem; color: var(--text-muted); padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem;">
+            <li><strong>Keyboard numbers not typing?</strong> Click anywhere on the calculator or press <kbd class="kbd-badge">Tab</kbd> to focus the calculator application.</li>
+            <li><strong>Want to hear the display aloud?</strong> Press <kbd class="kbd-badge">D</kbd> to hear the active result, or <kbd class="kbd-badge">F</kbd> for the full formula expression.</li>
+            <li><strong>Mail client not opening?</strong> Click the <strong>"Copy Email"</strong> button above, open your webmail (Gmail, Outlook, Yahoo), and paste <code style="color: var(--accent-cyan);">abuzaraalam34@gmail.com</code>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-primary modal-close">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/accessibility.js"></script>
+  <script src="js/calculator.js"></script>
+
+  <!-- Application Controller Initialization -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Initialize accessibility manager
+      window.accessibilityManager.init();
+
+      // 2. Initialize calculator display and history
+      window.calculator.updateUI();
+      window.calculator.renderHistory();
+
+      // 3. Delegate Keypad Button Clicks & Mobile View Switcher
+      const keypad = document.getElementById('keypad-section');
+      const mobileSwitcher = document.querySelector('.keypad-mobile-switcher');
+      if (mobileSwitcher && keypad) {
+        mobileSwitcher.addEventListener('click', (e) => {
+          const tab = e.target.closest('.mobile-tab-btn');
+          if (!tab) return;
+          mobileSwitcher.querySelectorAll('.mobile-tab-btn').forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
+          });
+          tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
+          if (tab.id === 'tab-mode-basic') {
+            keypad.dataset.mobileView = 'basic';
+            window.accessibilityManager.announce('Switched to basic keypad view.');
+          } else if (tab.id === 'tab-mode-sci') {
+            keypad.dataset.mobileView = 'sci';
+            window.accessibilityManager.announce('Switched to scientific functions view.');
+          }
+        });
+      }
+
+      if (keypad) {
+        keypad.addEventListener('click', (e) => {
+          const btn = e.target.closest('.calc-btn');
+          if (!btn) return;
+
+          const action = btn.dataset.action;
+          const value = btn.dataset.value;
+
+          switch (action) {
+            case 'digit':
+              window.calculator.inputDigit(value);
+              break;
+            case 'decimal':
+              window.calculator.inputDecimal();
+              break;
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+            case '^':
+              window.calculator.inputOperator(action);
+              break;
+            case '%':
+              window.calculator.inputPercentage();
+              break;
+            case 'equals':
+              window.calculator.calculate();
+              break;
+            case 'ac':
+              window.calculator.allClear();
+              break;
+            case 'ce':
+              window.calculator.clearEntry();
+              break;
+            case 'del':
+              window.calculator.backspace();
+              break;
+            case 'negate':
+              window.calculator.toggleSign();
+              break;
+            case 'ans':
+              window.calculator.recallPreviousAnswer();
+              break;
+            case 'paren-open':
+              window.calculator.inputParenthesis('(');
+              break;
+            case 'paren-close':
+              window.calculator.inputParenthesis(')');
+              break;
+            case 'comma':
+              window.calculator.inputParenthesis(',');
+              break;
+            case 'toggle-inv':
+              window.calculator.toggleInverseMode();
+              break;
+            case 'toggle-hyp':
+              window.calculator.toggleHyperbolicMode();
+              break;
+            case 'mc':
+              window.calculator.memoryClear();
+              break;
+            case 'mr':
+              window.calculator.memoryRecall();
+              break;
+            case 'm+':
+              window.calculator.memoryAdd();
+              break;
+            case 'm-':
+              window.calculator.memorySubtract();
+              break;
+            case 'ms':
+              window.calculator.memoryStore();
+              break;
+            case 'pi':
+            case 'e':
+            case 'tau':
+            case 'phi':
+              window.calculator.inputConstant(action);
+              break;
+            case 'toggle-frac':
+              window.calculator.toggleFraction();
+              break;
+            case 'toggle-eng':
+              window.calculator.toggleEngineeringNotation();
+              break;
+            case 'cycle-base':
+              window.calculator.cycleBaseMode();
+              break;
+            case 'open-constants': {
+              const b = document.getElementById('btn-open-constants');
+              if (b) b.click();
+              break;
+            }
+            case 'open-stats': {
+              const b = document.getElementById('btn-open-stats');
+              if (b) b.click();
+              break;
+            }
+            default:
+              // Scientific functions (sin, cos, tan, sqrt, ln, etc.)
+              if (action) {
+                window.calculator.inputFunction(action);
+              }
+              break;
+          }
+        });
+      }
+
+      // 4. Angle Mode Indicator Click (DEG/RAD/GRAD)
+      const angleIndicator = document.getElementById('calc-angle-indicator');
+      if (angleIndicator) {
+        angleIndicator.addEventListener('click', () => {
+          window.calculator.toggleAngleMode();
+        });
+      }
+
+      // 4b. Base Mode Indicator Click (DEC/HEX/BIN/OCT)
+      const baseIndicator = document.getElementById('calc-base-indicator');
+      if (baseIndicator) {
+        baseIndicator.addEventListener('click', () => {
+          window.calculator.cycleBaseMode();
+        });
+      }
+
+      // 4c. Read Display Aloud Button Click
+      const readDisplayBtn = document.getElementById('btn-read-display');
+      if (readDisplayBtn) {
+        readDisplayBtn.addEventListener('click', () => {
+          window.calculator.readCurrentDisplay();
+        });
+      }
+
+      // 4d. Tapping Display directly speaks value (Natural gesture on touch devices / TalkBack)
+      const calcDisplay = document.getElementById('calc-display');
+      if (calcDisplay) {
+        calcDisplay.addEventListener('click', () => {
+          window.calculator.readCurrentDisplay();
+        });
+      }
+
+      const calcExpr = document.getElementById('calc-expression');
+      if (calcExpr) {
+        calcExpr.addEventListener('click', () => {
+          window.calculator.readCurrentExpression();
+        });
+      }
+
+      // 5. Copy Result Button Click
+      const copyBtn = document.getElementById('btn-copy-result');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+          window.calculator.copyResult();
+        });
+      }
+
+      // 6. Global Keyboard Handler
+      window.addEventListener('keydown', (e) => {
+        window.calculator.handleKeyDown(e);
+      });
+
+      // 7. Modals / Dialogs Setup
+      const btnOpenHistory = document.getElementById('btn-open-history');
+      const btnOpenSettings = document.getElementById('btn-open-settings');
+      const btnOpenHelp = document.getElementById('btn-open-help');
+      const btnOpenConstants = document.getElementById('btn-open-constants');
+      const btnOpenStats = document.getElementById('btn-open-stats');
+
+      const modalHistory = document.getElementById('modal-history');
+      const modalSettings = document.getElementById('modal-settings');
+      const modalHelp = document.getElementById('modal-help');
+      const modalConstants = document.getElementById('modal-constants');
+      const modalStats = document.getElementById('modal-stats');
+
+      if (btnOpenHistory) {
+        btnOpenHistory.addEventListener('click', () => {
+          window.calculator.renderHistory();
+          window.accessibilityManager.openModal(modalHistory, btnOpenHistory);
+        });
+      }
+
+      if (btnOpenSettings) {
+        btnOpenSettings.addEventListener('click', () => {
+          window.accessibilityManager.openModal(modalSettings, btnOpenSettings);
+        });
+      }
+
+      if (btnOpenHelp) {
+        btnOpenHelp.addEventListener('click', () => {
+          window.accessibilityManager.openModal(modalHelp, btnOpenHelp);
+        });
+      }
+
+      // Feedback / Contact Modal Setup
+      const btnOpenFeedbackFooter = document.getElementById('btn-open-feedback-footer');
+      const btnOpenFeedbackHelp = document.getElementById('btn-open-feedback-help');
+      const modalFeedback = document.getElementById('modal-feedback');
+      const btnCopyEmail = document.getElementById('btn-copy-developer-email');
+      const copyEmailText = document.getElementById('copy-email-text');
+      const btnSendEmailClient = document.getElementById('btn-send-email-client');
+      const feedbackType = document.getElementById('feedback-type');
+      const feedbackSubject = document.getElementById('feedback-subject');
+      const feedbackMessage = document.getElementById('feedback-message');
+
+      function openFeedbackDialog(trigger) {
+        if (!modalFeedback) return;
+        window.accessibilityManager.openModal(modalFeedback, trigger);
+        if (feedbackSubject) setTimeout(() => feedbackSubject.focus(), 60);
+      }
+
+      if (btnOpenFeedbackFooter) {
+        btnOpenFeedbackFooter.addEventListener('click', () => {
+          openFeedbackDialog(btnOpenFeedbackFooter);
+        });
+      }
+
+      if (btnOpenFeedbackHelp) {
+        btnOpenFeedbackHelp.addEventListener('click', () => {
+          if (modalHelp) window.accessibilityManager.closeModal(modalHelp);
+          openFeedbackDialog(btnOpenFeedbackHelp);
+        });
+      }
+
+      const feedbackBanner = document.getElementById('feedback-response-banner');
+      const feedbackResponseText = document.getElementById('feedback-response-text');
+
+      if (btnCopyEmail) {
+        btnCopyEmail.addEventListener('click', async () => {
+          const email = 'abuzaraalam34@gmail.com';
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              await navigator.clipboard.writeText(email);
+            } else {
+              const ta = document.createElement('textarea');
+              ta.value = email;
+              document.body.appendChild(ta);
+              ta.select();
+              document.execCommand('copy');
+              document.body.removeChild(ta);
+            }
+            if (copyEmailText) copyEmailText.textContent = 'Copied!';
+            if (feedbackBanner && feedbackResponseText) {
+              feedbackResponseText.innerHTML = 'Developer email <strong>abuzaraalam34@gmail.com</strong> has been copied to your clipboard. Paste it into your email provider to send your message!';
+              feedbackBanner.style.display = 'block';
+            }
+            window.audioFeedback.playCalculationComplete();
+            window.accessibilityManager.announce('Developer email abuzaraalam34@gmail.com copied to clipboard.');
+            setTimeout(() => {
+              if (copyEmailText) copyEmailText.textContent = 'Copy Email';
+            }, 2500);
+          } catch (err) {
+            window.accessibilityManager.announce('Developer email is abuzaraalam34@gmail.com.');
+          }
+        });
+      }
+
+      if (btnSendEmailClient) {
+        btnSendEmailClient.addEventListener('click', () => {
+          const type = feedbackType ? feedbackType.value : 'General Feedback';
+          const subj = (feedbackSubject && feedbackSubject.value.trim()) ? feedbackSubject.value.trim() : 'Feedback for Axiom Calculator';
+          const fullSubject = `[Axiom Calculator - ${type}] ${subj}`;
+          const msg = feedbackMessage ? feedbackMessage.value.trim() : '';
+          const body = encodeURIComponent(
+            `Hello Mohammad Abuzar Alam,\n\n${msg}\n\n---\nSent from Axiom Scientific Calculator`
+          );
+          const mailtoUrl = `mailto:abuzaraalam34@gmail.com?subject=${encodeURIComponent(fullSubject)}&body=${body}`;
+          window.location.href = mailtoUrl;
+
+          if (feedbackBanner && feedbackResponseText) {
+            feedbackResponseText.innerHTML = 'Your default mail client has been opened with your message addressed to <strong>Mohammad Abuzar Alam (abuzaraalam34@gmail.com)</strong>. Click "Send" in your mail program to deliver it!';
+            feedbackBanner.style.display = 'block';
+          }
+          window.audioFeedback.playCalculationComplete();
+          window.accessibilityManager.announce('Opening email application with pre-filled message addressed to Mohammad Abuzar Alam.');
+        });
+      }
+
+      // Physical Constants Modal setup
+      function renderConstantsList(filter = '') {
+        const container = document.getElementById('constants-list');
+        if (!container || !window.calculator.PHYSICAL_CONSTANTS) return;
+        const query = filter.trim().toLowerCase();
+        const list = Array.from(window.calculator.PHYSICAL_CONSTANTS);
+        const filtered = list.filter(item => {
+          return (
+            item.name.toLowerCase().includes(query) ||
+            item.symbol.toLowerCase().includes(query) ||
+            item.unit.toLowerCase().includes(query) ||
+            item.id.toLowerCase().includes(query)
+          );
+        });
+
+        if (filtered.length === 0) {
+          container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--text-dim); padding: 1.5rem;">No matching constants found.</p>';
+          return;
+        }
+
+        container.innerHTML = filtered.map(item => `
+          <button type="button" class="constant-btn" data-const-id="${item.id}" aria-label="${item.name}, symbol ${item.symbol}, value ${item.value} ${item.unit}">
+            <div class="constant-symbol">${item.symbol}</div>
+            <div class="constant-details">
+              <div class="constant-name">${item.name}</div>
+              <div class="constant-val">${item.value} <span class="constant-unit">${item.unit}</span></div>
+            </div>
+          </button>
+        `).join('');
+      }
+
+      if (btnOpenConstants && modalConstants) {
+        btnOpenConstants.addEventListener('click', () => {
+          renderConstantsList('');
+          const searchInput = document.getElementById('constants-search-input');
+          if (searchInput) searchInput.value = '';
+          window.accessibilityManager.openModal(modalConstants, btnOpenConstants);
+          if (searchInput) setTimeout(() => searchInput.focus(), 60);
+        });
+      }
+
+      const constantsSearch = document.getElementById('constants-search-input');
+      if (constantsSearch) {
+        constantsSearch.addEventListener('input', (e) => {
+          renderConstantsList(e.target.value);
+        });
+      }
+
+      const constantsContainer = document.getElementById('constants-list');
+      if (constantsContainer) {
+        constantsContainer.addEventListener('click', (e) => {
+          const btn = e.target.closest('.constant-btn');
+          if (!btn) return;
+          const constId = btn.dataset.constId;
+          if (constId) {
+            window.calculator.insertPhysicalConstant(constId);
+            if (modalConstants) window.accessibilityManager.closeModal(modalConstants);
+          }
+        });
+      }
+
+      // Statistical Analysis Modal setup
+      if (btnOpenStats && modalStats) {
+        btnOpenStats.addEventListener('click', () => {
+          window.accessibilityManager.openModal(modalStats, btnOpenStats);
+          const statsInput = document.getElementById('stats-data-input');
+          if (statsInput) setTimeout(() => statsInput.focus(), 60);
+        });
+      }
+
+      const btnRunStats = document.getElementById('btn-run-stats');
+      const btnClearStats = document.getElementById('btn-clear-stats');
+      const statsInput = document.getElementById('stats-data-input');
+      const statsResultsBody = document.getElementById('stats-results-body');
+
+      if (btnRunStats && statsInput && statsResultsBody) {
+        btnRunStats.addEventListener('click', () => {
+          const raw = statsInput.value.trim();
+          if (!raw) {
+            window.accessibilityManager.announce('Please enter numbers for statistical calculation.');
+            return;
+          }
+          const tokens = raw.split(/[\s,;]+/).filter(t => t.length > 0);
+          const numbers = [];
+          for (const tok of tokens) {
+            const n = Number(tok);
+            if (!isNaN(n)) {
+              numbers.push(n);
+            }
+          }
+          if (numbers.length === 0) {
+            window.accessibilityManager.announce('No valid numeric values found in input.');
+            return;
+          }
+
+          const stats = window.calculator.calculateStats(numbers);
+          if (stats.error) {
+            window.accessibilityManager.announce(`Statistical error: ${stats.error}`);
+            statsResultsBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color: var(--accent-danger); padding: 1rem;">${stats.error}</td></tr>`;
+            return;
+          }
+
+          const rows = [
+            { label: 'Sample Count (N)', value: stats.count, raw: stats.count },
+            { label: 'Sum (Σx)', value: stats.sum, raw: stats.sum },
+            { label: 'Sum of Squares (Σx²)', value: stats.sumSquares, raw: stats.sumSquares },
+            { label: 'Arithmetic Mean (x̄)', value: stats.mean, raw: stats.mean },
+            { label: 'Median (Q2)', value: stats.median, raw: stats.median },
+            { label: 'Minimum (Min)', value: stats.min, raw: stats.min },
+            { label: 'Maximum (Max)', value: stats.max, raw: stats.max },
+            { label: 'Range (Max - Min)', value: stats.range, raw: stats.range },
+            { label: 'Sample Std Dev (s)', value: stats.sampleStdDev !== null ? stats.sampleStdDev : 'N/A', raw: stats.sampleStdDev },
+            { label: 'Population Std Dev (σ)', value: stats.populationStdDev, raw: stats.populationStdDev },
+            { label: 'Sample Variance (s²)', value: stats.sampleVariance !== null ? stats.sampleVariance : 'N/A', raw: stats.sampleVariance },
+            { label: 'Population Variance (σ²)', value: stats.populationVariance, raw: stats.populationVariance }
+          ];
+
+          statsResultsBody.innerHTML = rows.map(r => `
+            <tr>
+              <td><strong>${r.label}</strong></td>
+              <td>${r.value}</td>
+              <td>
+                ${r.raw !== null && r.raw !== 'N/A' ? `<button type="button" class="btn-recall-stat" data-stat-val="${r.raw}" aria-label="Insert ${r.label} into calculator">Recall</button>` : ''}
+              </td>
+            </tr>
+          `).join('');
+
+          window.accessibilityManager.announce(
+            `Statistics computed for ${stats.count} values. Mean is ${stats.mean}, median is ${stats.median}.`
+          );
+        });
+      }
+
+      if (statsResultsBody) {
+        statsResultsBody.addEventListener('click', (e) => {
+          const btn = e.target.closest('.btn-recall-stat');
+          if (!btn) return;
+          const val = btn.dataset.statVal;
+          if (val !== undefined && val !== null && val !== 'null') {
+            window.calculator.currentValue = String(val);
+            window.calculator.isResultState = true;
+            window.calculator.updateUI();
+            window.accessibilityManager.announce(`Recalled statistic ${val} into calculator.`);
+            if (modalStats) window.accessibilityManager.closeModal(modalStats);
+          }
+        });
+      }
+
+      if (btnClearStats && statsInput && statsResultsBody) {
+        btnClearStats.addEventListener('click', () => {
+          statsInput.value = '';
+          statsResultsBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-dim); padding: 1.5rem;">Enter values above and click "Compute Statistics".</td></tr>';
+          window.accessibilityManager.announce('Statistical data cleared.');
+          statsInput.focus();
+        });
+      }
+
+      // Close buttons on all modals
+      document.querySelectorAll('.modal-close').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const modal = e.target.closest('.modal-overlay');
+          if (modal) {
+            window.accessibilityManager.closeModal(modal);
+          }
+        });
+      });
+
+      // Overlay click to close
+      document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => {
+          if (e.target === overlay) {
+            window.accessibilityManager.closeModal(overlay);
+          }
+        });
+      });
+
+      // Clear History Button
+      const btnClearHistory = document.getElementById('btn-clear-history');
+      if (btnClearHistory) {
+        btnClearHistory.addEventListener('click', () => {
+          window.calculator.clearHistory();
+        });
+      }
+
+      // 8. Settings Form Controls Listeners
+      const settingThemeSelect = document.getElementById('setting-theme-select');
+      const settingSoundEnabled = document.getElementById('setting-sound-enabled');
+      const settingSoundVolume = document.getElementById('setting-sound-volume');
+      const settingVolumeLabel = document.getElementById('setting-volume-label');
+      const settingButtonSounds = document.getElementById('setting-button-sounds');
+      const settingSpokenAnnounce = document.getElementById('setting-spoken-announcements');
+      const settingHighContrast = document.getElementById('setting-high-contrast');
+      const settingLargeButtons = document.getElementById('setting-large-buttons');
+      const settingLargeDisplay = document.getElementById('setting-large-display');
+      const settingReduceAnimations = document.getElementById('setting-reduce-animations');
+      const btnResetSettings = document.getElementById('btn-reset-settings');
+
+      if (settingThemeSelect) {
+        settingThemeSelect.value = window.accessibilityManager.theme || 'dark';
+        settingThemeSelect.addEventListener('change', (e) => {
+          const t = e.target.value;
+          window.accessibilityManager.theme = t;
+          window.accessibilityManager.highContrastEnabled = (t === 'high-contrast');
+          if (settingHighContrast) settingHighContrast.checked = (t === 'high-contrast');
+          window.accessibilityManager.saveSettings();
+          window.accessibilityManager.applySettings();
+          const themeNames = {
+            'dark': 'Dark navy theme',
+            'high-contrast': 'High contrast AAA theme',
+            'light': 'Clean light theme'
+          };
+          window.accessibilityManager.announce(`${themeNames[t] || t} activated.`);
+        });
+      }
+
+      if (settingSoundEnabled) {
+        settingSoundEnabled.checked = window.audioFeedback.enabled;
+        settingSoundEnabled.addEventListener('change', (e) => {
+          window.audioFeedback.setEnabled(e.target.checked);
+          window.accessibilityManager.announce(
+            e.target.checked ? 'Sound effects enabled.' : 'Sound effects disabled.'
+          );
+        });
+      }
+
+      if (settingSoundVolume) {
+        const currentVolPct = Math.round(window.audioFeedback.volume * 100);
+        settingSoundVolume.value = currentVolPct;
+        if (settingVolumeLabel) settingVolumeLabel.textContent = `Volume: ${currentVolPct}%`;
+
+        settingSoundVolume.addEventListener('input', (e) => {
+          const val = Number(e.target.value);
+          window.audioFeedback.setVolume(val / 100);
+          if (settingVolumeLabel) settingVolumeLabel.textContent = `Volume: ${val}%`;
+          settingSoundVolume.setAttribute('aria-valuenow', String(val));
+          settingSoundVolume.setAttribute('aria-valuetext', `Volume: ${val} percent`);
+        });
+
+        settingSoundVolume.addEventListener('change', (e) => {
+          window.audioFeedback.playCalculationComplete();
+          window.accessibilityManager.announce(`Beep volume set to ${e.target.value} percent.`);
+        });
+      }
+
+      if (settingButtonSounds) {
+        settingButtonSounds.checked = window.audioFeedback.buttonFeedback;
+        settingButtonSounds.addEventListener('change', (e) => {
+          window.audioFeedback.setButtonFeedback(e.target.checked);
+          window.accessibilityManager.announce(
+            e.target.checked ? 'Button click beeps enabled.' : 'Button click beeps disabled.'
+          );
+        });
+      }
+
+      if (settingSpokenAnnounce) {
+        settingSpokenAnnounce.checked = window.accessibilityManager.spokenAnnouncementsEnabled;
+        settingSpokenAnnounce.addEventListener('change', (e) => {
+          window.accessibilityManager.spokenAnnouncementsEnabled = e.target.checked;
+          window.accessibilityManager.saveSettings();
+          if (e.target.checked) {
+            window.accessibilityManager.announce('Screen reader spoken announcements enabled.');
+          }
+        });
+      }
+
+      if (settingHighContrast) {
+        settingHighContrast.checked = window.accessibilityManager.highContrastEnabled;
+        settingHighContrast.addEventListener('change', (e) => {
+          window.accessibilityManager.highContrastEnabled = e.target.checked;
+          window.accessibilityManager.theme = e.target.checked ? 'high-contrast' : 'dark';
+          if (settingThemeSelect) settingThemeSelect.value = window.accessibilityManager.theme;
+          window.accessibilityManager.saveSettings();
+          window.accessibilityManager.applySettings();
+          window.accessibilityManager.announce(
+            e.target.checked ? 'High contrast mode enabled.' : 'High contrast mode disabled.'
+          );
+        });
+      }
+
+      if (settingLargeButtons) {
+        settingLargeButtons.checked = window.accessibilityManager.largeButtonsEnabled;
+        settingLargeButtons.addEventListener('change', (e) => {
+          window.accessibilityManager.largeButtonsEnabled = e.target.checked;
+          window.accessibilityManager.saveSettings();
+          window.accessibilityManager.applySettings();
+          window.accessibilityManager.announce(
+            e.target.checked ? 'Large buttons mode enabled.' : 'Standard buttons restored.'
+          );
+        });
+      }
+
+      if (settingLargeDisplay) {
+        settingLargeDisplay.checked = window.accessibilityManager.largeDisplayEnabled;
+        settingLargeDisplay.addEventListener('change', (e) => {
+          window.accessibilityManager.largeDisplayEnabled = e.target.checked;
+          window.accessibilityManager.saveSettings();
+          window.accessibilityManager.applySettings();
+          window.accessibilityManager.announce(
+            e.target.checked ? 'Large display text enabled.' : 'Standard display text restored.'
+          );
+        });
+      }
+
+      if (settingReduceAnimations) {
+        settingReduceAnimations.checked = window.accessibilityManager.reduceAnimations;
+        settingReduceAnimations.addEventListener('change', (e) => {
+          window.accessibilityManager.reduceAnimations = e.target.checked;
+          window.accessibilityManager.saveSettings();
+          window.accessibilityManager.applySettings();
+          window.accessibilityManager.announce(
+            e.target.checked ? 'Reduced animations enabled.' : 'Animations enabled.'
+          );
+        });
+      }
+
+      if (btnResetSettings) {
+        btnResetSettings.addEventListener('click', () => {
+          window.accessibilityManager.resetToDefaults();
+          if (settingThemeSelect) settingThemeSelect.value = 'dark';
+          if (settingSoundEnabled) settingSoundEnabled.checked = true;
+          if (settingButtonSounds) settingButtonSounds.checked = true;
+          if (settingSoundVolume) settingSoundVolume.value = 40;
+          if (settingVolumeLabel) settingVolumeLabel.textContent = 'Volume: 40%';
+          if (settingSpokenAnnounce) settingSpokenAnnounce.checked = true;
+          if (settingHighContrast) settingHighContrast.checked = false;
+          if (settingLargeButtons) settingLargeButtons.checked = false;
+          if (settingLargeDisplay) settingLargeDisplay.checked = false;
+          if (settingReduceAnimations) settingReduceAnimations.checked = false;
+        });
+      }
+    });
+  </script>
+</body>
+</html>

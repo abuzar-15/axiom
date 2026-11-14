@@ -1,0 +1,1515 @@
+/* ==========================================================================
+   Axiom Scientific Calculator - Universal Design System
+   Copyright (c) 2026 Mohammad Abuzar Alam. All rights reserved.
+   Author: Mohammad Abuzar Alam (abuzaraalam34@gmail.com)
+   Modern, Precision-Engineered, Responsive & Accessible (WCAG 2.2 AA / AAA)
+   Designed for Everyone: Screen Reader Users, Sighted Users, Mobile & Desktop
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. CSS Custom Properties (Design Tokens)
+   -------------------------------------------------------------------------- */
+:root {
+  /* Color Palette - Default Obsidian / Deep Slate Workstation */
+  --bg-app: #080c16;
+  --bg-card: #0f172a;
+  --bg-card-gradient: linear-gradient(180deg, #131b2e 0%, #0d1424 100%);
+  --bg-display: #050811;
+  --bg-display-gradient: linear-gradient(180deg, #070c18 0%, #030712 100%);
+  --bg-keypad: #0c1220;
+
+  /* Button Tokens: Numbers */
+  --btn-num-bg: #1e293b;
+  --btn-num-hover: #2d3b52;
+  --btn-num-active: #192333;
+  --btn-num-text: #f8fafc;
+  --btn-num-border: #334155;
+  --btn-num-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 4px rgba(0, 0, 0, 0.25);
+
+  /* Button Tokens: Scientific Functions */
+  --btn-sci-bg: #111a2d;
+  --btn-sci-hover: #1c2b47;
+  --btn-sci-active: #0c1424;
+  --btn-sci-text: #93c5fd;
+  --btn-sci-border: #1e2e4a;
+  --btn-sci-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  /* Button Tokens: Operators (+, -, *, /) */
+  --btn-op-bg: #172554;
+  --btn-op-hover: #1d4ed8;
+  --btn-op-active: #1e3a8a;
+  --btn-op-text: #bfdbfe;
+  --btn-op-border: #2563eb;
+  --btn-op-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 2px 5px rgba(23, 37, 84, 0.4);
+
+  /* Button Tokens: Clear / Delete Actions */
+  --btn-danger-bg: #2a1215;
+  --btn-danger-hover: #991b1b;
+  --btn-danger-active: #4c0519;
+  --btn-danger-text: #fca5a5;
+  --btn-danger-border: #7f1d1d;
+  --btn-danger-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 4px rgba(0, 0, 0, 0.25);
+
+  /* Button Tokens: Action / Utility (Parentheses, Negate, Comma, Percent) */
+  --btn-action-bg: #13242a;
+  --btn-action-hover: #0d5f57;
+  --btn-action-active: #0f3d37;
+  --btn-action-text: #5eead4;
+  --btn-action-border: #134e4a;
+  --btn-action-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 4px rgba(0, 0, 0, 0.25);
+
+  /* Button Tokens: Equals (=) Hero Button */
+  --btn-equals-bg: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #1d4ed8 100%);
+  --btn-equals-hover: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+  --btn-equals-active: #1e40af;
+  --btn-equals-text: #ffffff;
+  --btn-equals-border: #60a5fa;
+  --btn-equals-shadow: 0 4px 14px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+  /* Text Tokens */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --text-accent: #38bdf8;
+  --text-warning: #f87171;
+  --text-success: #34d399;
+
+  /* Focus & Borders */
+  --focus-ring: #38bdf8;
+  --focus-ring-offset: 3px;
+  --border-subtle: #1e293b;
+  --border-strong: #334155;
+
+  /* Typography */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'SF Mono', 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+
+  /* Layout & Sizing */
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 18px;
+  --border-radius-full: 9999px;
+  --button-min-height: 48px;
+  --display-min-height: 124px;
+  --keypad-gap: 8px;
+  --transition-speed: 0.16s;
+}
+
+/* --------------------------------------------------------------------------
+   2. High Contrast Theme (WCAG AAA >= 7:1)
+   -------------------------------------------------------------------------- */
+body.high-contrast {
+  --bg-app: #000000;
+  --bg-card: #000000;
+  --bg-card-gradient: #000000;
+  --bg-display: #000000;
+  --bg-display-gradient: #000000;
+  --bg-keypad: #000000;
+
+  --btn-num-bg: #000000;
+  --btn-num-hover: #1f1f1f;
+  --btn-num-active: #333333;
+  --btn-num-text: #ffffff;
+  --btn-num-border: #ffffff;
+  --btn-num-shadow: none;
+
+  --btn-sci-bg: #000000;
+  --btn-sci-hover: #142033;
+  --btn-sci-active: #243a5e;
+  --btn-sci-text: #7dd3fc;
+  --btn-sci-border: #7dd3fc;
+  --btn-sci-shadow: none;
+
+  --btn-op-bg: #000000;
+  --btn-op-hover: #222222;
+  --btn-op-active: #444444;
+  --btn-op-text: #facc15;
+  --btn-op-border: #facc15;
+  --btn-op-shadow: none;
+
+  --btn-danger-bg: #000000;
+  --btn-danger-hover: #330000;
+  --btn-danger-active: #550000;
+  --btn-danger-text: #ff6b6b;
+  --btn-danger-border: #ff6b6b;
+  --btn-danger-shadow: none;
+
+  --btn-action-bg: #000000;
+  --btn-action-hover: #003322;
+  --btn-action-active: #005533;
+  --btn-action-text: #5eead4;
+  --btn-action-border: #5eead4;
+  --btn-action-shadow: none;
+
+  --btn-equals-bg: #facc15;
+  --btn-equals-hover: #eab308;
+  --btn-equals-active: #ca8a04;
+  --btn-equals-text: #000000;
+  --btn-equals-border: #ffffff;
+  --btn-equals-shadow: none;
+
+  --text-main: #ffffff;
+  --text-muted: #e2e8f0;
+  --text-dim: #cbd5e1;
+  --text-accent: #facc15;
+  --focus-ring: #facc15;
+  --border-subtle: #ffffff;
+  --border-strong: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   2B. Clean Light Theme (Daytime Professional)
+   -------------------------------------------------------------------------- */
+body.light-theme {
+  --bg-app: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-card-gradient: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  --bg-display: #f8fafc;
+  --bg-display-gradient: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+  --bg-keypad: #f8fafc;
+
+  --btn-num-bg: #ffffff;
+  --btn-num-hover: #f1f5f9;
+  --btn-num-active: #e2e8f0;
+  --btn-num-text: #0f172a;
+  --btn-num-border: #cbd5e1;
+  --btn-num-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  --btn-sci-bg: #f1f5f9;
+  --btn-sci-hover: #e2e8f0;
+  --btn-sci-active: #cbd5e1;
+  --btn-sci-text: #1e293b;
+  --btn-sci-border: #cbd5e1;
+  --btn-sci-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  --btn-op-bg: #eff6ff;
+  --btn-op-hover: #2563eb;
+  --btn-op-active: #1d4ed8;
+  --btn-op-text: #1d4ed8;
+  --btn-op-border: #93c5fd;
+  --btn-op-shadow: 0 1px 3px rgba(37, 99, 235, 0.12);
+
+  --btn-danger-bg: #fef2f2;
+  --btn-danger-hover: #dc2626;
+  --btn-danger-active: #b91c1c;
+  --btn-danger-text: #b91c1c;
+  --btn-danger-border: #fca5a5;
+  --btn-danger-shadow: 0 1px 2px rgba(220, 38, 38, 0.08);
+
+  --btn-action-bg: #f0fdfa;
+  --btn-action-hover: #0d9488;
+  --btn-action-active: #0f766e;
+  --btn-action-text: #0f766e;
+  --btn-action-border: #99f6e4;
+  --btn-action-shadow: 0 1px 2px rgba(13, 148, 136, 0.08);
+
+  --btn-equals-bg: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  --btn-equals-hover: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  --btn-equals-active: #1e3a8a;
+  --btn-equals-text: #ffffff;
+  --btn-equals-border: #2563eb;
+  --btn-equals-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-dim: #64748b;
+  --text-accent: #2563eb;
+  --focus-ring: #2563eb;
+  --border-subtle: #e2e8f0;
+  --border-strong: #cbd5e1;
+}
+
+body.light-theme .btn-op:hover {
+  color: #ffffff;
+}
+body.light-theme .btn-danger:hover {
+  color: #ffffff;
+}
+body.light-theme .btn-action:hover {
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   3. Accessible Sizing Variations
+   -------------------------------------------------------------------------- */
+body.large-buttons {
+  --button-min-height: 56px;
+  --keypad-gap: 10px;
+}
+body.large-buttons .calc-btn {
+  font-size: 1.25rem;
+  padding: 12px 8px;
+}
+body.large-buttons .btn-sci {
+  font-size: 1.05rem;
+}
+
+body.large-display #calc-display {
+  font-size: 2.85rem !important;
+}
+body.large-display #calc-expression {
+  font-size: 1.4rem !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Reduced Motion Preference
+   -------------------------------------------------------------------------- */
+body.reduce-animations *,
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. Base Reset & Typography
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1.5rem 1rem 3rem;
+  overflow-x: hidden;
+}
+
+/* Screen reader only utility class */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Ensure live regions maintain an active accessible node for Android TalkBack */
+[aria-live] {
+  clip: rect(1px, 1px, 1px, 1px) !important;
+  clip-path: inset(50%) !important;
+}
+
+/* Skip links for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -70px;
+  left: 1rem;
+  background: var(--focus-ring);
+  color: #000000;
+  font-weight: 700;
+  padding: 10px 18px;
+  border-radius: var(--border-radius-sm);
+  z-index: 9999;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 1rem;
+  outline: 3px solid #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   6. App Container & Modern Header
+   -------------------------------------------------------------------------- */
+.calculator-app {
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Brand Identity & Logo */
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+}
+
+.brand-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 4px 8px rgba(56, 189, 248, 0.2));
+  transition: transform 0.25s ease;
+}
+.brand-logo-container:hover {
+  transform: rotate(4deg) scale(1.05);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+body.light-theme .brand-name {
+  background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+body.high-contrast .brand-name {
+  background: none;
+  -webkit-text-fill-color: #ffffff;
+  color: #ffffff;
+}
+
+.brand-tagline {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-accent);
+}
+
+/* Header Navigation Pills */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-icon-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-full);
+  padding: 8px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 38px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: all var(--transition-speed);
+}
+.btn-icon-nav:hover {
+  background-color: var(--btn-num-hover);
+  border-color: var(--text-accent);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+body.light-theme .btn-icon-nav:hover {
+  color: #0f172a;
+}
+.btn-icon-nav svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  color: var(--text-accent);
+}
+
+/* --------------------------------------------------------------------------
+   7. Main Calculator Chassis
+   -------------------------------------------------------------------------- */
+.calculator-card {
+  background: var(--bg-card-gradient);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+}
+body.light-theme .calculator-card {
+  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+/* --------------------------------------------------------------------------
+   8. Display Area
+   -------------------------------------------------------------------------- */
+.calculator-screen {
+  background: var(--bg-display-gradient);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--border-radius-md);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.05);
+  padding: 0.95rem 1.25rem;
+  min-height: var(--display-min-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+body.light-theme .calculator-screen {
+  border: 1px solid var(--border-subtle);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Status / Badges Bar */
+.screen-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+  gap: 0.5rem;
+}
+
+.status-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: var(--border-radius-full);
+  letter-spacing: 0.05em;
+  background-color: #1e293b;
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--transition-speed);
+}
+
+.badge-mode {
+  background-color: #172554;
+  color: #bfdbfe;
+  border-color: #3b82f6;
+  cursor: pointer;
+}
+.badge-mode:hover {
+  background-color: #2563eb;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.badge-base {
+  background-color: #064e3b;
+  color: #6ee7b7;
+  border-color: #10b981;
+  cursor: pointer;
+}
+.badge-base:hover {
+  background-color: #059669;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.badge-memory {
+  opacity: 0.35;
+  transition: all 0.2s ease;
+}
+.badge-memory.active {
+  opacity: 1;
+  background-color: #064e3b;
+  color: #34d399;
+  border-color: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.btn-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  border-radius: var(--border-radius-full);
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+.btn-copy:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-accent);
+  border-color: var(--text-accent);
+}
+.btn-copy svg {
+  width: 14px;
+  height: 14px;
+}
+.btn-copy.copied {
+  background-color: #064e3b;
+  color: #34d399;
+  border-color: #10b981;
+}
+
+/* Formula Expression Line */
+.screen-expression {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  text-align: right;
+  min-height: 1.6rem;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin;
+  padding-bottom: 2px;
+}
+
+/* Primary Result / Number Line */
+.screen-main-value {
+  font-family: var(--font-mono);
+  font-size: 2.45rem;
+  font-weight: 700;
+  color: var(--text-main);
+  text-align: right;
+  overflow-x: auto;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+/* --------------------------------------------------------------------------
+   9. Mobile Keypad Segmented Switcher (Visible on mobile <= 768px)
+   -------------------------------------------------------------------------- */
+.keypad-mobile-switcher {
+  display: none; /* Desktop default: hidden */
+  background-color: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-full);
+  padding: 4px;
+  margin-bottom: 0.5rem;
+  gap: 4px;
+}
+body.light-theme .keypad-mobile-switcher {
+  background-color: #e2e8f0;
+}
+
+.mobile-tab-btn {
+  flex: 1;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: var(--border-radius-full);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+.mobile-tab-btn.active {
+  background-color: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   10. Keypad Sections & Grid Layout
+   -------------------------------------------------------------------------- */
+.keypad-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--keypad-gap);
+}
+
+/* Top Memory & Mode Bar */
+.keypad-bar-top {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr) 1fr 1fr;
+  gap: var(--keypad-gap);
+}
+
+.btn-memory {
+  min-height: 38px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background-color: #111a2d;
+  color: #cbd5e1;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-sm);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.btn-memory:hover {
+  background-color: #1e2c47;
+  color: #ffffff;
+  border-color: var(--text-accent);
+}
+body.light-theme .btn-memory {
+  background-color: #f1f5f9;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+
+/* Main Grid Layout: Scientific (Left) + Standard (Right) */
+.keypad-main-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: var(--keypad-gap);
+}
+
+/* Scientific Functions Section */
+.keypad-scientific {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--keypad-gap);
+}
+
+/* Standard Keypad Section */
+.keypad-standard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--keypad-gap);
+}
+
+/* --------------------------------------------------------------------------
+   11. Universal Calculator Buttons
+   -------------------------------------------------------------------------- */
+.calc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--button-min-height);
+  padding: 8px 6px;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed), transform 0.08s ease, box-shadow var(--transition-speed);
+  position: relative;
+}
+
+.calc-btn:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+/* Accessible display focus outlines for TalkBack and keyboard */
+.screen-expression:focus-visible,
+.screen-main-value:focus-visible {
+  outline: 3px solid var(--focus-ring) !important;
+  outline-offset: 2px !important;
+  border-radius: var(--border-radius-sm);
+}
+
+/* Focus Indicator - WCAG 2.2 AAA */
+.calc-btn:focus-visible,
+.btn-icon-nav:focus-visible,
+.badge-mode:focus-visible,
+.badge-base:focus-visible,
+.btn-copy:focus-visible,
+.mobile-tab-btn:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--focus-ring) !important;
+  outline-offset: var(--focus-ring-offset) !important;
+  z-index: 10;
+}
+
+/* Number Buttons (0-9, .) */
+.btn-num {
+  background-color: var(--btn-num-bg);
+  color: var(--btn-num-text);
+  border: 1px solid var(--btn-num-border);
+  box-shadow: var(--btn-num-shadow);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.btn-num:hover {
+  background-color: var(--btn-num-hover);
+  border-color: #475569;
+}
+.btn-num:active {
+  background-color: var(--btn-num-active);
+}
+
+/* Scientific Buttons (sin, cos, tan, etc.) */
+.btn-sci {
+  background-color: var(--btn-sci-bg);
+  color: var(--btn-sci-text);
+  border: 1px solid var(--btn-sci-border);
+  box-shadow: var(--btn-sci-shadow);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.btn-sci:hover {
+  background-color: var(--btn-sci-hover);
+  color: #ffffff;
+  border-color: #38bdf8;
+}
+.btn-sci:active {
+  background-color: var(--btn-sci-active);
+}
+.btn-sci.active {
+  background-color: #0284c7;
+  color: #ffffff;
+  border-color: #38bdf8;
+  box-shadow: 0 0 12px rgba(2, 132, 199, 0.5);
+}
+
+/* Basic Operator Buttons (+, -, *, /, ^) */
+.btn-op {
+  background-color: var(--btn-op-bg);
+  color: var(--btn-op-text);
+  border: 1px solid var(--btn-op-border);
+  box-shadow: var(--btn-op-shadow);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.btn-op:hover {
+  background-color: var(--btn-op-hover);
+  color: #ffffff;
+  border-color: #60a5fa;
+}
+.btn-op:active {
+  background-color: var(--btn-op-active);
+}
+
+/* Clear & Delete Buttons (AC, CE, DEL) */
+.btn-danger {
+  background-color: var(--btn-danger-bg);
+  color: var(--btn-danger-text);
+  border: 1px solid var(--btn-danger-border);
+  box-shadow: var(--btn-danger-shadow);
+  font-weight: 700;
+}
+.btn-danger:hover {
+  background-color: var(--btn-danger-hover);
+  color: #ffffff;
+  border-color: #ef4444;
+}
+.btn-danger:active {
+  background-color: var(--btn-danger-active);
+}
+
+/* Action Buttons (Parentheses, Negate, Percent, Comma) */
+.btn-action {
+  background-color: var(--btn-action-bg);
+  color: var(--btn-action-text);
+  border: 1px solid var(--btn-action-border);
+  box-shadow: var(--btn-action-shadow);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.btn-action:hover {
+  background-color: var(--btn-action-hover);
+  color: #ffffff;
+  border-color: #2dd4bf;
+}
+.btn-action:active {
+  background-color: var(--btn-action-active);
+}
+
+/* Equals Button (=) */
+.btn-equals {
+  background: var(--btn-equals-bg);
+  color: var(--btn-equals-text);
+  border: 1px solid var(--btn-equals-border);
+  box-shadow: var(--btn-equals-shadow);
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+.btn-equals:hover {
+  background: var(--btn-equals-hover);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+.btn-equals:active {
+  background-color: var(--btn-equals-active);
+  transform: translateY(1px);
+}
+
+/* --------------------------------------------------------------------------
+   12. Modals & Dialogs (Preferences, History, Help, Constants, Stats)
+   -------------------------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(3, 7, 18, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.2s;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  width: 100%;
+  max-width: 620px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.96);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.modal-overlay.active .modal-content {
+  transform: scale(1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+
+.modal-close {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+.modal-close:hover {
+  color: var(--text-main);
+  background-color: var(--btn-num-hover);
+  border-color: var(--border-subtle);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Accessible Settings Controls */
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.settings-item:last-child {
+  border-bottom: none;
+}
+
+.settings-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-label {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.settings-desc {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+
+/* Modern Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #334155;
+  border: 2px solid #475569;
+  transition: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 34px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: #2563eb;
+  border-color: #38bdf8;
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(22px);
+}
+
+.toggle-switch input:focus-visible + .toggle-slider {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Volume Slider */
+.volume-control-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 180px;
+}
+
+.range-slider {
+  width: 100%;
+  accent-color: #38bdf8;
+  height: 6px;
+  cursor: pointer;
+}
+
+/* History List */
+.history-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.history-empty {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 2.5rem 1rem;
+  font-style: italic;
+}
+
+.history-item {
+  background-color: #111a2d;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  transition: border-color var(--transition-speed);
+}
+.history-item:hover {
+  border-color: var(--text-accent);
+}
+
+.history-recall-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 12px 16px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  color: inherit;
+  transition: background-color var(--transition-speed);
+}
+.history-recall-btn:hover {
+  background-color: #17243c;
+}
+
+.history-expr {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.history-eq {
+  display: none;
+}
+
+.history-res {
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-accent);
+}
+
+.history-meta {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+/* Help & Shortcuts Table */
+.shortcuts-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.shortcuts-table th,
+.shortcuts-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.shortcuts-table th {
+  background-color: #111a2d;
+  color: var(--text-accent);
+  font-weight: 700;
+}
+
+.kbd-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  background-color: #1e293b;
+  color: #f8fafc;
+  border: 1px solid #475569;
+  border-radius: 4px;
+  box-shadow: 0 2px 0 #334155;
+}
+
+/* Primary and Secondary Modal Buttons */
+.btn-primary {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: 1px solid #3b82f6;
+  border-radius: var(--border-radius-md);
+  padding: 9px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--border-radius-md);
+  padding: 9px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+.btn-secondary:hover {
+  background-color: var(--btn-num-hover);
+}
+
+/* Constants Grid */
+.constants-search {
+  width: 100%;
+  padding: 10px 14px;
+  background-color: #0b1120;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--border-radius-md);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+.constants-search:focus {
+  outline: 3px solid var(--focus-ring);
+}
+
+.constants-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+  max-height: 52vh;
+  overflow-y: auto;
+}
+
+.constant-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  background-color: #111a2d;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-md);
+  padding: 10px 14px;
+  cursor: pointer;
+  color: inherit;
+  transition: all var(--transition-speed);
+}
+.constant-btn:hover {
+  background-color: #17243c;
+  border-color: var(--text-accent);
+  transform: translateY(-1px);
+}
+
+.constant-symbol {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-accent);
+  min-width: 38px;
+  text-align: center;
+}
+
+.constant-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.constant-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.constant-val {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.constant-unit {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+}
+
+/* Statistics Tool */
+.stats-textarea {
+  width: 100%;
+  min-height: 85px;
+  padding: 10px 12px;
+  background-color: #0b1120;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--border-radius-md);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  resize: vertical;
+}
+.stats-textarea:focus {
+  outline: 3px solid var(--focus-ring);
+}
+
+.stats-results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.stats-results-table th,
+.stats-results-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  text-align: left;
+}
+
+.stats-results-table th {
+  color: var(--text-muted);
+  width: 48%;
+}
+
+.stats-results-table td {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-accent);
+}
+
+.btn-recall-stat {
+  margin-left: 8px;
+  background-color: #1e293b;
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-sm);
+  padding: 3px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+.btn-recall-stat:hover {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+/* Form Select */
+.form-select {
+  background-color: #0b1120;
+  color: var(--text-main);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--border-radius-md);
+  padding: 7px 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+.form-select:focus {
+  outline: 3px solid var(--focus-ring);
+}
+
+/* --------------------------------------------------------------------------
+   13. Responsive Layout & Mobile/Tablet Optimization
+   -------------------------------------------------------------------------- */
+@media (max-width: 820px) {
+  body {
+    padding: 0.75rem 0.65rem 2rem;
+  }
+
+  .calculator-card {
+    padding: 0.95rem;
+  }
+
+  .keypad-bar-top {
+    grid-template-columns: repeat(4, 1fr) 1.5fr;
+  }
+
+  .keypad-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Show the mobile switcher tabs on mobile/tablet */
+  .keypad-mobile-switcher {
+    display: flex;
+  }
+
+  /* Keypad view modes for mobile */
+  .keypad-container[data-mobile-view="basic"] .keypad-scientific {
+    display: none;
+  }
+  .keypad-container[data-mobile-view="basic"] .keypad-standard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .keypad-container[data-mobile-view="sci"] .keypad-scientific {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .keypad-container[data-mobile-view="sci"] .keypad-standard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .keypad-container[data-mobile-view="all"] .keypad-scientific {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .keypad-container[data-mobile-view="all"] .keypad-standard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .calc-btn {
+    min-height: 48px;
+    font-size: 1.1rem;
+  }
+
+  .screen-main-value {
+    font-size: 2.1rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .btn-icon-nav {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+  .btn-icon-nav span {
+    display: inline; /* Keep text visible or compact */
+  }
+
+  .keypad-bar-top {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr) !important;
+    gap: 4px;
+  }
+  .keypad-bar-top .calc-btn {
+    min-height: 42px;
+    padding: 4px 2px;
+    font-size: 0.82rem;
+  }
+
+  .keypad-scientific {
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 4px;
+  }
+  .keypad-scientific .calc-btn {
+    min-height: 44px;
+    padding: 4px 2px;
+    font-size: 0.95rem;
+  }
+
+  .keypad-standard {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 4px;
+  }
+  .keypad-standard .calc-btn {
+    min-height: 48px;
+    font-size: 1.15rem;
+  }
+
+  .screen-main-value {
+    font-size: 1.85rem;
+  }
+}
+
+@media (min-width: 821px) {
+  /* On desktop, always show both blocks regardless of data-mobile-view */
+  .keypad-scientific {
+    display: grid !important;
+  }
+  .keypad-standard {
+    display: grid !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Application Footer (Discreet, Non-Intrusive Attribution & Contact)
+   -------------------------------------------------------------------------- */
+.app-footer {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 1rem 0.5rem 0.5rem;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.footer-email-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--accent-cyan);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--border-radius-sm);
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  transition: all 0.2s ease;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+button.footer-email-link {
+  border: 1px solid rgba(56, 189, 248, 0.22);
+}
+
+.footer-email-link:hover {
+  background: rgba(56, 189, 248, 0.16);
+  color: #ffffff;
+  border-color: var(--accent-cyan);
+}
+
+.footer-email-link:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.developer-card {
+  transition: border-color 0.2s ease;
+}
+.developer-card:hover {
+  border-color: var(--accent-cyan) !important;
+}
