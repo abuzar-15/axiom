@@ -323,6 +323,69 @@ class AudioFeedbackManager {
     this.createTone('sine', 600, now, 0.04, 0.35);
     this.createTone('triangle', 900, now + 0.025, 0.05, 0.35);
   }
+
+  /**
+   * Previews a specific procedural tone at 100% full volume for the Audio Guide
+   * @param {string} toneName 
+   */
+  previewTone(toneName) {
+    if (!this.initContext()) return;
+    if (this.ctx.state === 'suspended') {
+      this.ctx.resume().catch(() => {});
+    }
+
+    // Save previous user volume and states
+    const originalVol = this.volume;
+    const originalFeedback = this.buttonFeedback;
+    const originalEnabled = this.enabled;
+
+    // Temporarily enable sound and boost master gain to 1.0 (100% full volume)
+    this.enabled = true;
+    this.buttonFeedback = true;
+    if (this.masterGain && this.ctx) {
+      this.masterGain.gain.setValueAtTime(1.0, this.ctx.currentTime);
+    }
+
+    switch (toneName) {
+      case 'number':
+        this.playNumber();
+        break;
+      case 'operator':
+        this.playOperator();
+        break;
+      case 'scientific':
+        this.playScientific();
+        break;
+      case 'complete':
+        this.playCalculationComplete();
+        break;
+      case 'error':
+        this.playError();
+        break;
+      case 'clear':
+        this.playClear();
+        break;
+      case 'memory':
+        this.playMemory();
+        break;
+      case 'backspace':
+        this.playBackspace();
+        break;
+      default:
+        this.playCalculationComplete();
+        break;
+    }
+
+    // Restore user settings after sound envelope completes
+    window.setTimeout(() => {
+      this.enabled = originalEnabled;
+      this.buttonFeedback = originalFeedback;
+      this.volume = originalVol;
+      if (this.masterGain && this.ctx) {
+        this.masterGain.gain.setValueAtTime(this.volume, this.ctx.currentTime);
+      }
+    }, 450);
+  }
 }
 
 // Global instance for calculator application

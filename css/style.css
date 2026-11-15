@@ -292,9 +292,11 @@ body {
   overflow-x: hidden;
 }
 
-/* Screen reader only utility class */
+/* Screen reader only utility class - robustly off-screen so live regions never render on top */
 .sr-only {
-  position: absolute !important;
+  position: fixed !important;
+  top: -9999px !important;
+  left: -9999px !important;
   width: 1px !important;
   height: 1px !important;
   padding: 0 !important;
@@ -303,12 +305,8 @@ body {
   clip: rect(0, 0, 0, 0) !important;
   white-space: nowrap !important;
   border: 0 !important;
-}
-
-/* Ensure live regions maintain an active accessible node for Android TalkBack */
-[aria-live] {
-  clip: rect(1px, 1px, 1px, 1px) !important;
-  clip-path: inset(50%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Skip links for keyboard navigation */
@@ -1182,6 +1180,85 @@ textarea:focus-visible {
   background-color: var(--btn-num-hover);
 }
 
+/* Audio Tone Legend Cards & Listen Buttons */
+.audio-tone-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-top: 0.5rem;
+}
+
+.audio-tone-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-sm);
+  transition: all var(--transition-speed);
+}
+
+.audio-tone-item:hover {
+  border-color: var(--border-accent);
+  background-color: var(--bg-hover);
+}
+
+.audio-tone-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.audio-tone-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.audio-tone-desc {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.btn-preview-audio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-accent);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--border-radius-full);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all var(--transition-speed);
+}
+
+.btn-preview-audio:hover {
+  background-color: var(--btn-num-hover);
+  border-color: var(--text-accent);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+body.light-theme .btn-preview-audio:hover {
+  color: #0f172a;
+}
+
+body.high-contrast .audio-tone-item {
+  border: 2px solid #ffffff;
+}
+
+body.high-contrast .btn-preview-audio {
+  border: 2px solid #facc15;
+  color: #facc15;
+}
+
 /* Constants Grid */
 .constants-search {
   width: 100%;
@@ -1399,15 +1476,20 @@ textarea:focus-visible {
 
   .header-actions {
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   .btn-icon-nav {
-    padding: 6px 10px;
-    font-size: 0.8rem;
+    padding: 6px 12px;
+    font-size: 0.82rem;
+    white-space: normal;
+    text-align: left;
+    min-height: 36px;
   }
   .btn-icon-nav span {
-    display: inline; /* Keep text visible or compact */
+    display: inline;
   }
 
   .keypad-bar-top {

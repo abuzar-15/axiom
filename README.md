@@ -40,7 +40,7 @@ Axiom unites two design philosophies that are often kept separate:
 - **Full Operator Precedence & Associativity**: Proper order of operations ($*$, $/$, $+$, $-$) and right-associative exponentiation ($2^{3^2} = 512$).
 - **Implicit Multiplication**: Handles $2(3+5) = 16$ and $(2+1)(3+2) = 15$ effortlessly.
 - **Trigonometric Modes**: Full Degree (DEG), Radian (RAD), and Gradian (GRAD) support with exact boundary corrections ($\sin(180^\circ) = 0$, $\cos(90^\circ) = 0$).
-- **Hyperbolic & Inverse Functions**: $\sinh$, $\cosh$, $\tanh$, $\text{asinh}$, $\text{acosh}$, $\text{atanh}$, and complete secondary trig ($\csc$, $\sec$, $\cot$).
+- **Hyperbolic & Inverse Functions**: Complete inverse trigonometry ($\sin^{-1}, \cos^{-1}, \tan^{-1}, \csc^{-1}, \sec^{-1}, \cot^{-1}$), hyperbolic functions ($\sinh, \cosh, \tanh, \text{csch}, \text{sech}, \text{coth}$), and inverse hyperbolics ($\text{asinh}, \text{acosh}, \text{atanh}, \text{acsch}, \text{asech}, \text{acoth}$).
 - **Roots, Powers & Exponentials**: $x^2$, $x^3$, $x^y$, $\sqrt{x}$, $\sqrt[3]{x}$, $\sqrt[y]{x}$, $1/x$, $e^x$, $10^x$, $2^x$.
 - **Logarithms**: Natural ($\ln$), Common ($\log_{10}$), Binary ($\log_2$), and arbitrary base logarithms.
 - **Combinatorics & Discrete Math**: Factorials ($n!$), Permutations ($nPr$), Combinations ($nCr$), Modulo ($\%$), GCD, and LCM.
@@ -58,6 +58,7 @@ Axiom unites two design philosophies that are often kept separate:
   - Debounced alert announcements (70ms) preventing button touch events from drowning out calculation results.
   - Native touch responsiveness with `touch-action: manipulation;` and zero-delay tap handling.
 - **NVDA & JAWS on Windows**: Full keyboard access with top-row and numpad numbers, unabbreviated speech labels (`sin` is announced as "Sine", `+` as "Addition"), and dual-slot live regions.
+- **Orientation & Shortcuts Prompt on Page Load**: Automatically speaks the application name and prompts screen reader users: *"Axiom Scientific Calculator. Direct keyboard entry ready. For keyboard shortcuts and accessibility guide, press F1."* Focus lands immediately on the entry display.
 - **Intelligent Token-Aware Backspace**: Pressing Backspace deletes the atomic token (whether a digit, operator, or function like `sin(`) and announces both the deleted item and the remaining value (e.g. *"5 deleted. Current value: 12"*).
 - **Dual-Slot Live Regions**: Alternating live spans prevent browser text deduplication so consecutive identical outputs (e.g., repeated zeros or results) are consistently voiced.
 - **Display Read-Out**: Press <kbd>D</kbd>, tap **Speak**, or tap the display on touch devices to hear the active display value; press <kbd>F</kbd> to hear the entire formula.
@@ -119,12 +120,17 @@ Axiom is a 100% static, client-side web application. It requires zero server run
 | `Enter` or `=` | Calculate | Compute expression result and voice output |
 | `Backspace` | Token Backspace | Deletes last character or function token with speech |
 | `Delete` | Clear Entry (CE) | Clears current input value |
-| `Escape` | All Clear (AC) | Resets calculator / Closes open dialogs |
+| `Escape` | Close Tool / All Clear | Closes active tool dialog announcing its name; on calculator, clears display |
 | `(` and `)` | Parentheses | Open and close grouped sub-expressions |
 | `^` | Power ($x^y$) | Exponentiation |
 | `%` | Percentage | Divides current value by 100 |
 | `!` | Factorial ($n!$) | Factorial calculation |
-| `s`, `c`, `t` | Trig Shortcuts | Fast input for `sin`, `cos`, `tan` |
+| `s`, `c`, `t` | Primary Trig | Fast input for `sin`, `cos`, `tan` |
+| `z`, `x`, `o` | Reciprocal Trig | Fast input for `csc` (cosecant), `sec` (secant), `cot` (cotangent) |
+| `Shift + S`, `Shift + C`, `Shift + T` | Direct Inverse Primary Trig | Quick input for $\sin^{-1}$ (arcsin), $\cos^{-1}$ (arccos), $\tan^{-1}$ (arctan) |
+| `Shift + Z`, `Shift + X`, `Shift + O` | Direct Inverse Reciprocal Trig | Quick input for $\csc^{-1}$ (arccsc), $\sec^{-1}$ (arcsec), $\cot^{-1}$ (arccot) |
+| `i` or `Alt + I` | Toggle 2nd / Inverse | Toggle 2nd/Inverse mode ($\sin^{-1}, \cos^{-1}, \tan^{-1}, \csc^{-1}, \sec^{-1}, \cot^{-1}$, roots, powers) |
+| `y` or `Alt + Y` | Toggle Hyperbolic | Toggle hyperbolic mode ($\sinh, \cosh, \tanh, \text{csch}, \text{sech}, \text{coth}$, and inverse hyperbolics) |
 | `l`, `g` | Logarithms | Fast input for `ln` and `log10` |
 | `r` | Square Root | Square root ($\sqrt{x}$) |
 | `p`, `e` | Constants | Insert $\pi$ (3.14159...) and Euler's constant $e$ (2.71828...) |
@@ -134,11 +140,11 @@ Axiom is a 100% static, client-side web application. It requires zero server run
 | `Alt + B` | Base Mode | Cycle Number Base (DEC &rarr; HEX &rarr; BIN &rarr; OCT) |
 | `Alt + N` | Fraction Toggle | Toggle Fraction and Decimal representation ($F \Leftrightarrow D$) |
 | `Alt + E` | Engineering | Toggle Engineering notation ($ENG$) |
-| `Alt + C` | Constants Library | Open Scientific Physical Constants Library dialog |
-| `Alt + T` | Statistics Tool | Open Descriptive Statistical Analysis dialog |
-| `Alt + H` | History | Open Calculation History dialog |
-| `Alt + S` | Settings | Open Preferences & Settings dialog |
-| `F1` or `?` | User Guide | Open Keyboard Shortcuts & Help dialog |
+| `Alt + C` | Physical Constants Library | Open Physical Constants Library dialog |
+| `Alt + T` | Statistical Analysis Tool | Open Statistical Analysis Tool dialog |
+| `Alt + H` | Calculation History | Open Calculation History dialog |
+| `Alt + S` | Preferences & Settings | Open Preferences & Settings dialog |
+| `F1` or `?` | Keyboard Shortcuts & Accessibility Guide | Open Keyboard Shortcuts & Accessibility Guide dialog |
 
 ---
 
@@ -188,7 +194,7 @@ All preferences are adjusted in the **Preferences & Settings** dialog (<kbd>Alt 
 
 For inquiries, feature suggestions, feedback, or accessibility recommendations:
 - **Email**: `abuzaraalam34@gmail.com`
-- **Application**: Click **Help** (<kbd>F1</kbd>) or use the **Feedback & Contact** footer link directly within Axiom.
+- **Application**: Click **Guide** (<kbd>F1</kbd>) or use the **Feedback & Contact** footer link directly within Axiom.
 
 ---
 

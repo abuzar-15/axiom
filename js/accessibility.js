@@ -71,12 +71,24 @@ class AccessibilityManager {
       'cos⁻¹': 'Inverse cosine',
       'atan': 'Inverse tangent',
       'tan⁻¹': 'Inverse tangent',
+      'acsc': 'Inverse cosecant',
+      'csc⁻¹': 'Inverse cosecant',
+      'asec': 'Inverse secant',
+      'sec⁻¹': 'Inverse secant',
+      'acot': 'Inverse cotangent',
+      'cot⁻¹': 'Inverse cotangent',
       'sinh': 'Hyperbolic sine',
       'cosh': 'Hyperbolic cosine',
       'tanh': 'Hyperbolic tangent',
+      'csch': 'Hyperbolic cosecant',
+      'sech': 'Hyperbolic secant',
+      'coth': 'Hyperbolic cotangent',
       'asinh': 'Inverse hyperbolic sine',
       'acosh': 'Inverse hyperbolic cosine',
       'atanh': 'Inverse hyperbolic tangent',
+      'acsch': 'Inverse hyperbolic cosecant',
+      'asech': 'Inverse hyperbolic secant',
+      'acoth': 'Inverse hyperbolic cotangent',
       'sqrt': 'Square root',
       '√': 'Square root',
       '√x': 'Square root',
@@ -284,6 +296,18 @@ class AccessibilityManager {
         this.politeAnnouncer.textContent = finalMsg;
       }
     }
+
+    // Auto-clear live region slot after announcement has been dispatched
+    // Proportional duration ensures longer announcements are never truncated before screen reader finishes speaking
+    const clearDuration = Math.max(3500, finalMsg.length * 80);
+    window.setTimeout(() => {
+      const s1 = document.getElementById('sr-polite-1');
+      const s2 = document.getElementById('sr-polite-2');
+      if (s1 && s1.textContent === finalMsg) s1.textContent = '';
+      if (s2 && s2.textContent === finalMsg) s2.textContent = '';
+      const fallback = document.getElementById('screen-reader-announcer');
+      if (fallback && fallback.textContent === finalMsg) fallback.textContent = '';
+    }, clearDuration);
   }
 
   /**
@@ -317,6 +341,14 @@ class AccessibilityManager {
 
     // 70ms timeout prevents Android TalkBack button touch event from swallowing the result
     window.setTimeout(speak, 70);
+
+    // Auto-clear live region slot after announcement has been spoken
+    window.setTimeout(() => {
+      const s1 = document.getElementById('sr-result-1');
+      const s2 = document.getElementById('sr-result-2');
+      if (s1 && s1.textContent === message) s1.textContent = '';
+      if (s2 && s2.textContent === message) s2.textContent = '';
+    }, 2500);
   }
 
   /**
@@ -342,6 +374,14 @@ class AccessibilityManager {
     } else {
       this.announceAssertive(finalMsg);
     }
+
+    // Auto-clear error announcement
+    window.setTimeout(() => {
+      const s1 = document.getElementById('sr-assertive-1');
+      const s2 = document.getElementById('sr-assertive-2');
+      if (s1 && s1.textContent === finalMsg) s1.textContent = '';
+      if (s2 && s2.textContent === finalMsg) s2.textContent = '';
+    }, 3000);
   }
 
   /**
@@ -378,6 +418,10 @@ class AccessibilityManager {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && this.activeModal) {
         e.preventDefault();
+        e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === 'function') {
+          e.stopImmediatePropagation();
+        }
         this.closeModal(this.activeModal);
         return;
       }
@@ -403,7 +447,7 @@ class AccessibilityManager {
           }
         }
       }
-    });
+    }, { capture: true });
   }
 
   /**
@@ -463,8 +507,9 @@ class AccessibilityManager {
       app.removeAttribute('inert');
     }
 
-    const title = modal.querySelector('h2, .modal-title')?.textContent || 'Dialog';
-    this.announce(`${title} closed.`);
+    const rawTitle = modal.querySelector('h2, .modal-title')?.textContent || 'Tool';
+    const cleanTitle = rawTitle.replace(/\s+/g, ' ').trim();
+    this.announce(`${cleanTitle} closed.`);
 
     // Restore focus to original trigger element
     if (this.lastFocusedElement && typeof this.lastFocusedElement.focus === 'function') {

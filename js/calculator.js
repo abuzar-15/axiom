@@ -143,6 +143,7 @@ class ScientificCalculator {
    */
   toggleInverseMode() {
     this.isInverseMode = !this.isInverseMode;
+    this.updateUI();
     if (window.audioFeedback) window.audioFeedback.playScientific();
     if (window.accessibilityManager) {
       window.accessibilityManager.announce(
@@ -156,6 +157,7 @@ class ScientificCalculator {
    */
   toggleHyperbolicMode() {
     this.isHyperbolic = !this.isHyperbolic;
+    this.updateUI();
     if (window.audioFeedback) window.audioFeedback.playScientific();
     if (window.accessibilityManager) {
       window.accessibilityManager.announce(
@@ -358,10 +360,43 @@ class ScientificCalculator {
     return this.fromRadians(Math.atan(x));
   }
 
+  // Inverse Cosecant (arccsc)
+  acsc(x) {
+    if (Math.abs(x) < 1) {
+      throw new Error('Domain error: arccsc requires |x| >= 1');
+    }
+    return this.fromRadians(Math.asin(1 / x));
+  }
+
+  // Inverse Secant (arcsec)
+  asec(x) {
+    if (Math.abs(x) < 1) {
+      throw new Error('Domain error: arcsec requires |x| >= 1');
+    }
+    return this.fromRadians(Math.acos(1 / x));
+  }
+
+  // Inverse Cotangent (arccot)
+  acot(x) {
+    if (x === 0) return this.fromRadians(Math.PI / 2);
+    return this.fromRadians(Math.atan(1 / x));
+  }
+
   // Hyperbolic Functions
   sinh(x) { return Math.sinh(x); }
   cosh(x) { return Math.cosh(x); }
   tanh(x) { return Math.tanh(x); }
+  csch(x) {
+    if (Math.abs(x) < 1e-15) throw new Error('Cosecant hyperbolic is undefined at 0');
+    return 1 / Math.sinh(x);
+  }
+  sech(x) {
+    return 1 / Math.cosh(x);
+  }
+  coth(x) {
+    if (Math.abs(x) < 1e-15) throw new Error('Cotangent hyperbolic is undefined at 0');
+    return Math.cosh(x) / Math.sinh(x);
+  }
   asinh(x) { return Math.asinh(x); }
   acosh(x) {
     if (x < 1) throw new Error('Domain error: acosh requires x >= 1');
@@ -370,6 +405,18 @@ class ScientificCalculator {
   atanh(x) {
     if (x <= -1 || x >= 1) throw new Error('Domain error: atanh requires -1 < x < 1');
     return Math.atanh(x);
+  }
+  acsch(x) {
+    if (Math.abs(x) < 1e-15) throw new Error('Domain error: acsch requires x != 0');
+    return Math.asinh(1 / x);
+  }
+  asech(x) {
+    if (x <= 0 || x > 1) throw new Error('Domain error: asech requires 0 < x <= 1');
+    return Math.acosh(1 / x);
+  }
+  acoth(x) {
+    if (Math.abs(x) <= 1) throw new Error('Domain error: acoth requires |x| > 1');
+    return Math.atanh(1 / x);
   }
 
   // Square root
@@ -458,8 +505,9 @@ class ScientificCalculator {
     // List of known function identifiers
     const functionNames = [
       'sin', 'cos', 'tan', 'csc', 'sec', 'cot',
-      'asin', 'acos', 'atan',
-      'sinh', 'cosh', 'tanh', 'asinh', 'acosh', 'atanh',
+      'asin', 'acos', 'atan', 'acsc', 'asec', 'acot',
+      'sinh', 'cosh', 'tanh', 'csch', 'sech', 'coth',
+      'asinh', 'acosh', 'atanh', 'acsch', 'asech', 'acoth',
       'sqrt', 'cbrt', 'nthRoot', 'sqr', 'cube', 'recip',
       'ln', 'log10', 'log2', 'log', 'exp', 'pow10', 'pow2',
       'fact', 'nPr', 'nCr', 'gcd', 'lcm', 'abs',
@@ -803,12 +851,21 @@ class ScientificCalculator {
           case 'asin': stack.push(this.asin(arg)); break;
           case 'acos': stack.push(this.acos(arg)); break;
           case 'atan': stack.push(this.atan(arg)); break;
+          case 'acsc': stack.push(this.acsc(arg)); break;
+          case 'asec': stack.push(this.asec(arg)); break;
+          case 'acot': stack.push(this.acot(arg)); break;
           case 'sinh': stack.push(this.sinh(arg)); break;
           case 'cosh': stack.push(this.cosh(arg)); break;
           case 'tanh': stack.push(this.tanh(arg)); break;
+          case 'csch': stack.push(this.csch(arg)); break;
+          case 'sech': stack.push(this.sech(arg)); break;
+          case 'coth': stack.push(this.coth(arg)); break;
           case 'asinh': stack.push(this.asinh(arg)); break;
           case 'acosh': stack.push(this.acosh(arg)); break;
           case 'atanh': stack.push(this.atanh(arg)); break;
+          case 'acsch': stack.push(this.acsch(arg)); break;
+          case 'asech': stack.push(this.asech(arg)); break;
+          case 'acoth': stack.push(this.acoth(arg)); break;
           case 'sqrt': stack.push(this.sqrt(arg)); break;
           case 'cbrt': stack.push(this.cbrt(arg)); break;
           case 'sqr': stack.push(arg * arg); break;
@@ -1009,6 +1066,9 @@ class ScientificCalculator {
         'sin': 'asin',
         'cos': 'acos',
         'tan': 'atan',
+        'csc': 'acsc',
+        'sec': 'asec',
+        'cot': 'acot',
         'sqr': 'sqrt',
         'cube': 'cbrt',
         'pow10': 'log10',
@@ -1024,9 +1084,15 @@ class ScientificCalculator {
         'sin': 'sinh',
         'cos': 'cosh',
         'tan': 'tanh',
+        'csc': 'csch',
+        'sec': 'sech',
+        'cot': 'coth',
         'asin': 'asinh',
         'acos': 'acosh',
-        'atan': 'atanh'
+        'atan': 'atanh',
+        'acsc': 'acsch',
+        'asec': 'asech',
+        'acot': 'acoth'
       };
       if (hypMap[funcToInsert]) funcToInsert = hypMap[funcToInsert];
     }
@@ -1210,7 +1276,7 @@ class ScientificCalculator {
     this.baseNumericValue = null;
     if (window.audioFeedback) window.audioFeedback.playClear();
     if (window.accessibilityManager) {
-      window.accessibilityManager.announce('Calculator cleared.');
+      window.accessibilityManager.announce('All cleared, calculator is zero.');
     }
     this.updateUI();
   }
@@ -1912,7 +1978,7 @@ class ScientificCalculator {
     const baseIndicator = document.getElementById('calc-base-indicator');
     if (baseIndicator) {
       baseIndicator.textContent = this.baseMode;
-      baseIndicator.setAttribute('aria-label', `Current number base: ${this.baseMode}. Click to cycle base (Alt+B)`);
+      baseIndicator.setAttribute('aria-label', `Current number base: ${this.baseMode}`);
     }
 
     const fracBtn = document.getElementById('btn-frac');
@@ -1943,6 +2009,9 @@ class ScientificCalculator {
     const sinBtn = document.querySelector('[data-action="sin"]');
     const cosBtn = document.querySelector('[data-action="cos"]');
     const tanBtn = document.querySelector('[data-action="tan"]');
+    const cscBtn = document.querySelector('[data-action="csc"]');
+    const secBtn = document.querySelector('[data-action="sec"]');
+    const cotBtn = document.querySelector('[data-action="cot"]');
     const sqrBtn = document.querySelector('[data-action="sqr"]');
     const lnBtn = document.querySelector('[data-action="ln"]');
     const logBtn = document.querySelector('[data-action="log"]');
@@ -1956,6 +2025,18 @@ class ScientificCalculator {
       cosBtn.setAttribute('aria-label', 'Inverse hyperbolic cosine');
       tanBtn.innerHTML = 'atanh';
       tanBtn.setAttribute('aria-label', 'Inverse hyperbolic tangent');
+      if (cscBtn) {
+        cscBtn.innerHTML = 'acsch';
+        cscBtn.setAttribute('aria-label', 'Inverse hyperbolic cosecant');
+      }
+      if (secBtn) {
+        secBtn.innerHTML = 'asech';
+        secBtn.setAttribute('aria-label', 'Inverse hyperbolic secant');
+      }
+      if (cotBtn) {
+        cotBtn.innerHTML = 'acoth';
+        cotBtn.setAttribute('aria-label', 'Inverse hyperbolic cotangent');
+      }
     } else if (this.isHyperbolic) {
       sinBtn.innerHTML = 'sinh';
       sinBtn.setAttribute('aria-label', 'Hyperbolic sine');
@@ -1963,6 +2044,18 @@ class ScientificCalculator {
       cosBtn.setAttribute('aria-label', 'Hyperbolic cosine');
       tanBtn.innerHTML = 'tanh';
       tanBtn.setAttribute('aria-label', 'Hyperbolic tangent');
+      if (cscBtn) {
+        cscBtn.innerHTML = 'csch';
+        cscBtn.setAttribute('aria-label', 'Hyperbolic cosecant');
+      }
+      if (secBtn) {
+        secBtn.innerHTML = 'sech';
+        secBtn.setAttribute('aria-label', 'Hyperbolic secant');
+      }
+      if (cotBtn) {
+        cotBtn.innerHTML = 'coth';
+        cotBtn.setAttribute('aria-label', 'Hyperbolic cotangent');
+      }
     } else if (this.isInverseMode) {
       sinBtn.innerHTML = 'sin⁻¹';
       sinBtn.setAttribute('aria-label', 'Inverse sine');
@@ -1970,6 +2063,18 @@ class ScientificCalculator {
       cosBtn.setAttribute('aria-label', 'Inverse cosine');
       tanBtn.innerHTML = 'tan⁻¹';
       tanBtn.setAttribute('aria-label', 'Inverse tangent');
+      if (cscBtn) {
+        cscBtn.innerHTML = 'csc⁻¹';
+        cscBtn.setAttribute('aria-label', 'Inverse cosecant');
+      }
+      if (secBtn) {
+        secBtn.innerHTML = 'sec⁻¹';
+        secBtn.setAttribute('aria-label', 'Inverse secant');
+      }
+      if (cotBtn) {
+        cotBtn.innerHTML = 'cot⁻¹';
+        cotBtn.setAttribute('aria-label', 'Inverse cotangent');
+      }
     } else {
       sinBtn.innerHTML = 'sin';
       sinBtn.setAttribute('aria-label', 'Sine');
@@ -1977,6 +2082,18 @@ class ScientificCalculator {
       cosBtn.setAttribute('aria-label', 'Cosine');
       tanBtn.innerHTML = 'tan';
       tanBtn.setAttribute('aria-label', 'Tangent');
+      if (cscBtn) {
+        cscBtn.innerHTML = 'csc';
+        cscBtn.setAttribute('aria-label', 'Cosecant');
+      }
+      if (secBtn) {
+        secBtn.innerHTML = 'sec';
+        secBtn.setAttribute('aria-label', 'Secant');
+      }
+      if (cotBtn) {
+        cotBtn.innerHTML = 'cot';
+        cotBtn.setAttribute('aria-label', 'Cotangent');
+      }
     }
 
     if (sqrBtn) {
@@ -2015,19 +2132,23 @@ class ScientificCalculator {
   // ==========================================
 
   handleKeyDown(e) {
-    if (!e) return;
+    if (!e || e.defaultPrevented) return;
 
-    // If user is inside an input or editable field in settings, allow standard editing
-    if (e.target && e.target.tagName && ['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName.toUpperCase())) {
-      return;
-    }
-
-    // Modal close with Escape is handled in accessibility.js
+    // If modal is active, do not intercept calculator keys
     if (window.accessibilityManager && window.accessibilityManager.activeModal) {
       if (e.key === 'Escape') {
         e.preventDefault();
+        e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === 'function') {
+          e.stopImmediatePropagation();
+        }
         window.accessibilityManager.closeModal(window.accessibilityManager.activeModal);
       }
+      return;
+    }
+
+    // If user is inside an input or editable field in settings/dialogs, allow standard editing
+    if (e.target && e.target.tagName && ['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName.toUpperCase())) {
       return;
     }
 
@@ -2040,6 +2161,10 @@ class ScientificCalculator {
       (e.code === 'Equal' && !e.shiftKey)
     ) {
       e.preventDefault();
+      e.stopPropagation();
+      if (typeof e.stopImmediatePropagation === 'function') {
+        e.stopImmediatePropagation();
+      }
       this.calculate();
       return;
     }
@@ -2152,9 +2277,55 @@ class ScientificCalculator {
       return;
     }
 
-    // 8. QUICK SCIENTIFIC SHORTCUTS (sin, cos, tan, ln, log, sqrt, pi, e, read display/formula)
+    // 7b. DIRECT INVERSE TRIG SHORTCUTS WITH SHIFT
+    // (Shift+S: asin, Shift+C: acos, Shift+T: atan, Shift+Z: acsc, Shift+X: asec, Shift+O: acot)
+    if (e.shiftKey && !e.altKey && !e.ctrlKey && !e.metaKey) {
+      const lower = e.key.toLowerCase();
+      if (lower === 's') {
+        e.preventDefault();
+        this.inputFunction('asin');
+        return;
+      }
+      if (lower === 'c') {
+        e.preventDefault();
+        this.inputFunction('acos');
+        return;
+      }
+      if (lower === 't') {
+        e.preventDefault();
+        this.inputFunction('atan');
+        return;
+      }
+      if (lower === 'z') {
+        e.preventDefault();
+        this.inputFunction('acsc');
+        return;
+      }
+      if (lower === 'x') {
+        e.preventDefault();
+        this.inputFunction('asec');
+        return;
+      }
+      if (lower === 'o') {
+        e.preventDefault();
+        this.inputFunction('acot');
+        return;
+      }
+    }
+
+    // 8. QUICK SCIENTIFIC SHORTCUTS (sin, cos, tan, ln, log, sqrt, pi, e, 2nd, hyp, read display/formula)
     if (!e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
       const lower = e.key.toLowerCase();
+      if (lower === 'i') {
+        e.preventDefault();
+        this.toggleInverseMode();
+        return;
+      }
+      if (lower === 'y') {
+        e.preventDefault();
+        this.toggleHyperbolicMode();
+        return;
+      }
       if (lower === 'd') {
         e.preventDefault();
         this.readCurrentDisplay();
@@ -2178,6 +2349,21 @@ class ScientificCalculator {
       if (lower === 't') {
         e.preventDefault();
         this.inputFunction('tan');
+        return;
+      }
+      if (lower === 'z') {
+        e.preventDefault();
+        this.inputFunction('csc');
+        return;
+      }
+      if (lower === 'x') {
+        e.preventDefault();
+        this.inputFunction('sec');
+        return;
+      }
+      if (lower === 'o') {
+        e.preventDefault();
+        this.inputFunction('cot');
         return;
       }
       if (lower === 'l') {
@@ -2210,6 +2396,31 @@ class ScientificCalculator {
     // 9. ALT KEY SHORTCUTS
     if (e.altKey && !e.ctrlKey && !e.metaKey) {
       const lower = e.key.toLowerCase();
+      if (lower === 'i') {
+        e.preventDefault();
+        this.toggleInverseMode();
+        return;
+      }
+      if (lower === 'y') {
+        e.preventDefault();
+        this.toggleHyperbolicMode();
+        return;
+      }
+      if (lower === 'z') {
+        e.preventDefault();
+        this.inputFunction('csc');
+        return;
+      }
+      if (lower === 'x') {
+        e.preventDefault();
+        this.inputFunction('sec');
+        return;
+      }
+      if (lower === 'o') {
+        e.preventDefault();
+        this.inputFunction('cot');
+        return;
+      }
       if (lower === 'd') {
         e.preventDefault();
         this.readCurrentDisplay();
